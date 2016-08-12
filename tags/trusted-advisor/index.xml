@@ -3,7 +3,7 @@
   <channel>
       <title>Trusted Advisor on Intispace </title>
       <generator uri="https://gohugo.io">Hugo</generator>
-    <link>https://riesal.github.io/tags/trusted-advisor/</link>
+    <link>https://blog.intispace.com/tags/trusted-advisor/</link>
     <language>en-us</language>
     
     
@@ -11,10 +11,10 @@
     
     <item>
       <title>AWS Trusted Advisor</title>
-      <link>https://riesal.github.io/2016/05/aws-trusted-advisor/</link>
+      <link>https://blog.intispace.com/2016/05/aws-trusted-advisor/</link>
       <pubDate>Thu, 05 May 2016 16:13:53 &#43;0000</pubDate>
       
-      <guid>https://riesal.github.io/2016/05/aws-trusted-advisor/</guid>
+      <guid>https://blog.intispace.com/2016/05/aws-trusted-advisor/</guid>
       <description>
 
 &lt;p&gt;AWS Trusted Advisor is a product that allows a cloud administrator to provision Amazon Web Services resources according to best practices in four categories: cost optimization, security, fault tolerance and performance improvement. AWS Trusted Advisor compiles best practices based on the collective experiences of previous and existing AWS customers.&lt;/p&gt;

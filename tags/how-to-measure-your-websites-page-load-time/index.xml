@@ -3,7 +3,7 @@
   <channel>
       <title>How To Measure Your Websites Page Load Time on Intispace </title>
       <generator uri="https://gohugo.io">Hugo</generator>
-    <link>https://riesal.github.io/tags/how-to-measure-your-websites-page-load-time/</link>
+    <link>https://blog.intispace.com/tags/how-to-measure-your-websites-page-load-time/</link>
     <language>en-us</language>
     
     
@@ -11,10 +11,10 @@
     
     <item>
       <title>How To Measure Your Website’s Page Load Time</title>
-      <link>https://riesal.github.io/2015/05/how-to-measure-your-websites-page-load-time/</link>
+      <link>https://blog.intispace.com/2015/05/how-to-measure-your-websites-page-load-time/</link>
       <pubDate>Mon, 25 May 2015 00:00:04 &#43;0000</pubDate>
       
-      <guid>https://riesal.github.io/2015/05/how-to-measure-your-websites-page-load-time/</guid>
+      <guid>https://blog.intispace.com/2015/05/how-to-measure-your-websites-page-load-time/</guid>
       <description>
 
 &lt;p&gt;When assessing the effectiveness of CDN, W3 Total Cache or any other WordPress caching plugin, it’s important that you are able to correctly measure the page loading time of your website.&lt;/p&gt;

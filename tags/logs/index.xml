@@ -3,7 +3,7 @@
   <channel>
       <title>Logs on Intispace </title>
       <generator uri="https://gohugo.io">Hugo</generator>
-    <link>https://riesal.github.io/tags/logs/</link>
+    <link>https://blog.intispace.com/tags/logs/</link>
     <language>en-us</language>
     
     
@@ -11,10 +11,10 @@
     
     <item>
       <title>What is Amazon CloudWatch Logs and how does it work?</title>
-      <link>https://riesal.github.io/2016/05/amazon-cloudwatch-logs-work/</link>
+      <link>https://blog.intispace.com/2016/05/amazon-cloudwatch-logs-work/</link>
       <pubDate>Thu, 05 May 2016 16:31:10 &#43;0000</pubDate>
       
-      <guid>https://riesal.github.io/2016/05/amazon-cloudwatch-logs-work/</guid>
+      <guid>https://blog.intispace.com/2016/05/amazon-cloudwatch-logs-work/</guid>
       <description>&lt;p&gt;Amazon CloudWatch monitors many AWS Services such as Elastic Compute Cloud (EC2), Relational Database Service, Elastic Block Storage and several others. CloudWatch alerts can identify events such as CPU spikes and latency issues. When used with AWS AutoScaling, administrators can seamlessly increase EC2 capacity as needed.&lt;/p&gt;
 
 &lt;p&gt;But since its inception, Amazon CloudWatch has had some limitations. One issue was that it lacked the ability to process huge amounts of custom log data that cloud platforms create, and to react to events in near real time. CloudWatch Logs, a new feature introduced at the AWS Summit in New York last month, is an extension of CloudWatch that admins can use to detect patterns and take action to resolve issues that arise.&lt;/p&gt;

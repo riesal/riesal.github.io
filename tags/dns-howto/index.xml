@@ -3,7 +3,7 @@
   <channel>
       <title>Dns Howto on Intispace </title>
       <generator uri="https://gohugo.io">Hugo</generator>
-    <link>https://riesal.github.io/tags/dns-howto/</link>
+    <link>https://blog.intispace.com/tags/dns-howto/</link>
     <language>en-us</language>
     
     
@@ -11,10 +11,10 @@
     
     <item>
       <title>A Glance Guide to DNS</title>
-      <link>https://riesal.github.io/2015/05/a-glance-guide-to-dns/</link>
+      <link>https://blog.intispace.com/2015/05/a-glance-guide-to-dns/</link>
       <pubDate>Mon, 11 May 2015 10:04:36 &#43;0000</pubDate>
       
-      <guid>https://riesal.github.io/2015/05/a-glance-guide-to-dns/</guid>
+      <guid>https://blog.intispace.com/2015/05/a-glance-guide-to-dns/</guid>
       <description>&lt;p&gt;&lt;strong&gt;Take a quick behind-the-scenes tour of how DNS works to connect you to your desired webpage.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;The internet is no longer just a nice-to-have feature. It has become a significant part of our lives, with most people connecting to the internet every single day. Although millions of people are online at any given time, many don’t understand what is going on behind the scenes. When you enter something in the address bar, how does the browser know exactly where to go? DNS is the answer.&lt;/p&gt;
