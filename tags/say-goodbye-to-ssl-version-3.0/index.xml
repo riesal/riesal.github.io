@@ -3,7 +3,7 @@
   <channel>
       <title>Say Goodbye To Ssl Version 3.0 on Intispace </title>
       <generator uri="https://gohugo.io">Hugo</generator>
-    <link>https://blog.intispace.com/tags/say-goodbye-to-ssl-version-3/index.0/</link>
+    <link>https://riesal.github.io/tags/say-goodbye-to-ssl-version-3/index.0/</link>
     <language>en-us</language>
     
     
@@ -11,10 +11,10 @@
     
     <item>
       <title>Say Goodbye to SSL Version 3.0</title>
-      <link>https://blog.intispace.com/2015/05/say-goodbye-to-ssl-version-3-0/</link>
+      <link>https://riesal.github.io/2015/05/say-goodbye-to-ssl-version-3-0/</link>
       <pubDate>Thu, 21 May 2015 12:44:21 &#43;0000</pubDate>
       
-      <guid>https://blog.intispace.com/2015/05/say-goodbye-to-ssl-version-3-0/</guid>
+      <guid>https://riesal.github.io/2015/05/say-goodbye-to-ssl-version-3-0/</guid>
       <description>
 
 &lt;p&gt;It is no secret that securing your client’s data is an ongoing process and not something that you can simply install on a server/platform. That is why security solutions and protocols evolve all the time and developers frequently release new versions. The two cryptographic protocols that provide communication security over the Internet are TLS and SSL. The latest version of Secure Sockets Layer (SSL version 3.0) is the predecessor of TLS and is nearly 15 years old. So it was only a matter of time for someone to find the next big issue related to the SSL protocol. Yesterday Bodo Möller from the Google Security Team wrote &lt;a href=&#34;http://googleonlinesecurity.blogspot.co.uk/2014/10/this-poodle-bites-exploiting-ssl-30.html&#34; target=&#34;_blank&#34;&gt;a blog post&lt;/a&gt; about a new vulnerability in the design of SSL version 3.0. The vulnerability allows attackers to calculate the plain text of secure connections.&lt;/p&gt;

@@ -3,7 +3,7 @@
   <channel>
       <title>Amazon Inspector on Intispace </title>
       <generator uri="https://gohugo.io">Hugo</generator>
-    <link>https://blog.intispace.com/tags/amazon-inspector/</link>
+    <link>https://riesal.github.io/tags/amazon-inspector/</link>
     <language>en-us</language>
     
     
@@ -11,10 +11,10 @@
     
     <item>
       <title>Amazon Inspector helps Sysadmin to automate security assessment</title>
-      <link>https://blog.intispace.com/2016/05/amazon-inspector-helps-sysadmin-automate-security-assessment/</link>
+      <link>https://riesal.github.io/2016/05/amazon-inspector-helps-sysadmin-automate-security-assessment/</link>
       <pubDate>Sat, 07 May 2016 07:29:21 &#43;0000</pubDate>
       
-      <guid>https://blog.intispace.com/2016/05/amazon-inspector-helps-sysadmin-automate-security-assessment/</guid>
+      <guid>https://riesal.github.io/2016/05/amazon-inspector-helps-sysadmin-automate-security-assessment/</guid>
       <description>
 
 &lt;p&gt;Anyone who has ever worked with PHP, Apache or MySQL Web applications is aware of how quickly vulnerabilities can surface and become widespread problems. Security and vulnerability testing are standard among many of these application types because they&amp;#8217;re frequently used. Consequently, attackers target these types of apps. Every system is vulnerable, making it nearly impossible to keep up with all of the security updates manually.&lt;/p&gt;

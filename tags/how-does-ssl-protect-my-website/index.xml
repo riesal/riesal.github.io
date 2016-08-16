@@ -3,7 +3,7 @@
   <channel>
       <title>How Does Ssl Protect My Website on Intispace </title>
       <generator uri="https://gohugo.io">Hugo</generator>
-    <link>https://blog.intispace.com/tags/how-does-ssl-protect-my-website/</link>
+    <link>https://riesal.github.io/tags/how-does-ssl-protect-my-website/</link>
     <language>en-us</language>
     
     
@@ -11,10 +11,10 @@
     
     <item>
       <title>How Does SSL Protect My Website?</title>
-      <link>https://blog.intispace.com/2015/05/how-does-ssl-protect-my-website/</link>
+      <link>https://riesal.github.io/2015/05/how-does-ssl-protect-my-website/</link>
       <pubDate>Sun, 17 May 2015 17:12:19 &#43;0000</pubDate>
       
-      <guid>https://blog.intispace.com/2015/05/how-does-ssl-protect-my-website/</guid>
+      <guid>https://riesal.github.io/2015/05/how-does-ssl-protect-my-website/</guid>
       <description>&lt;p&gt;One of the most economical and secure ways to protect your website on affordable hosting platforms is to deploy a private Secure Socket Layer (SSL) on you’re your website giving the instant ability to roll out protected URLs like &lt;a href=&#34;https://www.mysite.com/&#34;&gt;https://www.mysite.com&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;If you are still in doubt as to what an SSL actually does consider this explanation from &lt;a href=&#34;http://www.symantec.com/theme.jsp?themeid=how-ssl-works&#34;&gt;Symantec&lt;/a&gt; on the digital handshake that takes place between a browser and a server:&lt;/p&gt;

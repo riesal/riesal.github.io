@@ -3,7 +3,7 @@
   <channel>
       <title>Wordpress Jetpack Howto on Intispace </title>
       <generator uri="https://gohugo.io">Hugo</generator>
-    <link>https://blog.intispace.com/tags/wordpress-jetpack-howto/</link>
+    <link>https://riesal.github.io/tags/wordpress-jetpack-howto/</link>
     <language>en-us</language>
     
     
@@ -11,10 +11,10 @@
     
     <item>
       <title>Optimizing Jetpack!</title>
-      <link>https://blog.intispace.com/2015/05/optimizing-jetpack/</link>
+      <link>https://riesal.github.io/2015/05/optimizing-jetpack/</link>
       <pubDate>Thu, 21 May 2015 12:35:10 &#43;0000</pubDate>
       
-      <guid>https://blog.intispace.com/2015/05/optimizing-jetpack/</guid>
+      <guid>https://riesal.github.io/2015/05/optimizing-jetpack/</guid>
       <description>&lt;div class=&#34;grid-col span12&#34;&gt;
   Jetpack remains a polarizing plugin amongst developers so it’s not often discussed on developer-oriented blogs. The plugin has a history filled with bloat, slowness, and conflicts with other plugins. Admittedly, I myself have a love/hate relationship with it.
 &lt;/div&gt;
