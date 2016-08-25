@@ -93,6 +93,130 @@ done
     </item>
     
     <item>
+      <title>Upgrade CentOS kernel without Reboot using Ksplice</title>
+      <link>https://riesal.github.io/2016/08/upgrade-centos-kernel-without-reboot-using-ksplice/</link>
+      <pubDate>Wed, 24 Aug 2016 18:04:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/08/upgrade-centos-kernel-without-reboot-using-ksplice/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;It is simply how to allow kernel swap without needing reboot.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Generally, all Linux distributions needs a scheduled reboot once to stay up to date with important kernel security updates. RHN (or other distro vendors) provides Linux kernel security updates.&lt;/p&gt;
+
+&lt;p&gt;&lt;span id=&#34;more-4512&#34;&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;You can apply kernel updates using yum command or apt-get command line options. After each upgrade you need to reboot the server. Ksplice service allows you to skip reboot step and apply hotfixes to kernel without rebooting the server. In this post I will cover a quick installation of Ksplice for RHEL 5.x and try to find out if service is worth every penny.&lt;/p&gt;
+
+&lt;p&gt;The technology and hack behind this looks pretty cool. This is useful if you’ve a small number of Linux based servers and/or you want avoid unscheduled reboot just to apply hotfix to Linux kernel.&lt;/p&gt;
+
+&lt;p&gt;How Do I Install Ksplice?&lt;/p&gt;
+
+&lt;p&gt;First, you need to register with Ksplice. Type the following command to install rpm repo under RHEL 5:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rpm -ivh https://www.ksplice.com/yum/uptrack/centos/ksplice-uptrack-release.noarch.rpm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To install Ksplice, enter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install uptrack
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Edit /etc/uptrack/uptrack.conf, enter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;vi /etc/uptrack/uptrack.conf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Update it as follows (input your access key):&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;############ [Auth] accesskey = ADD-YOUR-ACCESS-KEY-HERE [Network]
+####### Proxy to use when accessing the Uptrack server, of the form
+####### [protocol://][:port]
+####### The proxy must support making HTTPS connections. If this is unset,
+####### Uptrack will look for the https_proxy, HTTPS_PROXY, and http_proxy
+####### environment variables in that order, and then finally look for a
+####### proxy setting in the system-wide GConf database, if available. https_proxy = [Settings]
+####### Automatically install updates at boot time. If this is set, on
+####### reboot into the same kernel, Uptrack will re-install the same set of
+####### updates that were present before the reboot. install_on_reboot = yes
+####### Options configuring the Uptrack cron job.
+#
+####### GUI users will get all notices via the GUI and likely want to set
+####### the following cron options to &amp;ldquo;no&amp;rdquo;.
+####### Cron job will install updates automatically autoinstall = no
+####### Cron job will print a message when new updates are installed.
+####### This option is only relevant if autoinstall = yes cron_output_install = no
+####### Cron job will print a message when new updates are available cron_output_available = no
+####### Cron job will print a message when it encounters errors cron_output_error = no&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Save and close the file.&lt;/p&gt;
+
+&lt;p&gt;How Do I Apply Rebootless Kernel Updates?
+You need to first download and apply updates via RHN:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum -y update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;OR&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum update kernel kernel-headers kernel-devel
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Don’t reboot the box, simply type the following command to apply hotfix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;uptrack-upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To see a list of updates that are currently installed, enter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;uptrack-show -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Sample Email Notification
+You will get an email as follows when updates are available:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://s0.cyberciti.org/uploads/tips/2010/04/ksplice-rhel-update-email.png&#34; alt=&#34;Fig.01: Ksplice Update Notification&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The web interface also provides information about your server and installed kernel updates:
+&lt;img src=&#34;http://s0.cyberciti.org/uploads/tips/2010/04/uptrack-web-interface.png&#34; alt=&#34;Fig.02: Uptrack Web Interface&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Conclusion&lt;/p&gt;
+
+&lt;p&gt;The pricing is as follows:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Monthly price per system First 20 servers : $3.95&lt;/li&gt;
+&lt;li&gt;Beyond 20 servers: $2.95&lt;/li&gt;
+&lt;li&gt;Currently it is free for all Ubuntu users.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Ksplice is a pretty good and stable software. This is useful for Linux admin or business who can not accept downtime for patching. A few business comes in my mind:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Small shop, say 8-12 Linux based servers.&lt;/li&gt;
+&lt;li&gt;Pro-blogging or webmaster servers (a typical setup included one web
+server and one db server). Avoiding downtime means more ad revenue
+for webmasters.&lt;/li&gt;
+&lt;li&gt;Hosting companies – again avoiding downtime means good customer
+satisfactions and less work for sys admins. If you run VM based
+hosting (OpenVZ or XEN based vps) you can avoid downtime too.&lt;/li&gt;
+&lt;li&gt;Small cluster of Linux system, say 6 system – If cluster is using 80%
+of capacity and if one of node rebooted for kernel upgrade, load will
+up for rest of 5 systems. In such case, this service can help to keep
+load under control without rebooting the box. However, this is NOT
+very useful for very large Linux based cluster redundant
+load-balanced servers, routers, switches, firewalls etc. Since your
+cluster is so large that 4-5 servers failing makes no difference to
+the remaining nodes. In some cases it is possible to do geo load
+balancing too.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But I’ve HA Failover Solution In Place…
+100% uptime depends upon lots of factors and and HA solution handles hardware or other failures very well. However, &lt;em&gt;Ksplice service is not all about 100% uptime&lt;/em&gt;, &lt;strong&gt;it is about not rebooting your server for a Linux kernel upgrade&lt;/strong&gt;. You can easily combine Ksplice with HA solution (such as keepalived+nginx reverse proxy) and try to get perfect five 9s. I highly recommend this service for small to medium size business or professional webmasters.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Olympic Joseph Schooling Coronation Complete</title>
       <link>https://riesal.github.io/2016/08/olympic-joseph-schooling-coronation-complete/</link>
       <pubDate>Sat, 13 Aug 2016 16:06:47 &#43;0000</pubDate>
@@ -1227,70 +1351,6 @@ Instance metadata is data about your instance that you can use to configure or m
     Social media is now an essential part of curating an online presence. You want it to be as easy as possible for your website visitors to find and follow you on other social networks. Having a consistent handle across your website and social media accounts streamlines your online presence and is a great way to brand yourself. With the right tools, it doesn’t take a lot of work to determine if a name is available across the board. &lt;a href=&#34;http://www.name.com/blog/business/social-media-2/2015/09/rembrandt-social-media-branding-made-easy/&#34; target=&#34;_blank&#34;&gt;Download the Chrome extension Rembrandt&lt;/a&gt; and whenever you search for a domain name on intispace.com, you’ll automatically see if the same handles are available on Facebook, Twitter, Instagram, and Pinterest.
   &lt;/p&gt;
 &lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Easy ways to create a sitemap</title>
-      <link>https://riesal.github.io/2015/08/easy-ways-to-create-a-sitemap/</link>
-      <pubDate>Thu, 13 Aug 2015 09:07:42 &#43;0000</pubDate>
-      
-      <guid>https://riesal.github.io/2015/08/easy-ways-to-create-a-sitemap/</guid>
-      <description>
-
-&lt;h3 id=&#34;what-is-a-sitemap&#34;&gt;What is a sitemap?&lt;/h3&gt;
-
-&lt;p&gt;A sitemap is a document that lists all URLs of your website that you would like crawled by a search engine. Most often, this document gives additional details such as the date a page was last modified, how frequently a page may change, and whether the page should be given priority over others, I will show you all the easy ways to create a sitemap..&lt;/p&gt;
-
-&lt;h3 id=&#34;why-do-i-need-a-sitemap&#34;&gt;Why do I need a sitemap?&lt;/h3&gt;
-
-&lt;p&gt;We’ve all become accustomed to using a search engine, probably daily. We often “Google” our questions throughout the day. Sitemaps are important because they tell search engines what pages are available for crawling on the website. They help search engines navigate your website and with this, your content is indexed.&lt;/p&gt;
-
-&lt;p&gt;You may be wondering how sitemaps work, since it is kind of an abstract concept. Think of it this way, your website is a building, and the sitemap is the blueprint that explains where all the parts of the structure are. An important addition to any site, they are easy to create and once they are set up, do not require a lot of maintenance.&lt;/p&gt;
-
-&lt;h3 id=&#34;how-do-the-search-engines-find-the-sitemap&#34;&gt;How do the search engines find the sitemap?&lt;/h3&gt;
-
-&lt;p&gt;Once your sitemap is set up, search engines don’t automatically find it. To have your site indexed, a submittal process is required. The process is easy, and this can be accomplished in just a few simple steps. There are others, but the two major search engines to start with are Google and Bing. Easy ways to create a sitemap, once you have your sitemap ready, you can do this by setting up a &lt;a href=&#34;https://www.google.com/webmasters/tools/&#34; target=&#34;_blank&#34;&gt;Google Webmaster Tools&lt;/a&gt; and a &lt;a href=&#34;http://www.bing.com/toolbox/webmaster&#34; target=&#34;_blank&#34;&gt;Bing Webmaster Tools&lt;/a&gt; account. After the accounts are setup, you will be able to walk through step by step to get your sitemap submitted.&lt;/p&gt;
-
-&lt;h3 id=&#34;how-to-create-a-sitemap&#34;&gt;&lt;strong&gt;How to create a sitemap&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;h4 id=&#34;small-website-solution-manual-option&#34;&gt;&lt;strong&gt;Small website solution manual option&lt;/strong&gt;&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.xml-sitemaps.com/&#34; target=&#34;_blank&#34;&gt;XML-Sitemaps&lt;/a&gt; is a tool that will generate a sitemap for you. Currently, it will generate up to 500 pages. This option works best for small websites that are not updated frequently since it requires manual updating each time a page is added or removed. It’s worth mentioning in case your preference is to be up and running quickly and don’t mind doing the manual work of creating and moving the sitemap file. If you want to create something fast, or are just curious about what a sitemap looks like, it is easy to generate one. All you have to do is enter your URL and it takes care of the rest.&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&#34;aligncenter size-full wp-image-12277&#34; src=&#34;http://getflywheel.com/wp-content/uploads/2015/08/xml-sitemap-generator.jpg&#34; alt=&#34;xml-sitemap-generator&#34; width=&#34;1022&#34; height=&#34;272&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Once the generator has created your sitemap, you need to upload it to the root of your domain; the URL will be something like www.yoursite.com/sitemap.xml.&lt;/p&gt;
-
-&lt;h4 id=&#34;wordpress-specific-solutions-for-sitemaps&#34;&gt;WordPress specific solutions for sitemaps&lt;/h4&gt;
-
-&lt;p&gt;We all know how awesome WordPress is and that there are many great plugins available. Although there is nothing wrong with manually creating a sitemap, it can be a pain if you have to do this all of the time. With sitemap specific plugins, there is no need to manually create your own. Although there are many options (and opinions!) out there, these two have been chosen as great options for an automatic solution to get you up and running.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Yoast’s WordPress SEO&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;You may already be using WordPress SEO by Yoast. If so, it does have a sitemap generator built right into it. It is very easy to setup.&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&#34;aligncenter size-full wp-image-12278&#34; src=&#34;http://getflywheel.com/wp-content/uploads/2015/08/yoast-plugin.jpg&#34; alt=&#34;yoast-plugin&#34; width=&#34;1022&#34; height=&#34;1266&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;You will see an extensive option list that can be customized to your liking. If there are specific post types and taxonomies that you would like excluded, that is an option. If you have a very large site, Yoast has the capability to only include the specified number of URL’s listed on a page, which is less strain on your server.&lt;/p&gt;
-
-&lt;p&gt;The nice thing is, this plugin takes care of the generating and publishing of the sitemap. It will be found at &lt;a href=&#34;http://www.yoursite.com/sitemap_index.xml&#34;&gt;http://www.yoursite.com/sitemap_index.xml&lt;/a&gt;. The main sitemap page lists a sitemap for each post type. It lists all the URLs that you would like crawled.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Google XML Sitemap&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://wordpress.org/plugins/google-sitemap-generator/&#34; target=&#34;_blank&#34;&gt;Google XML Sitemaps&lt;/a&gt; is another great option. Google XML Sitemaps gives you extra information like details of when your sitemap was last generated, and it also has the capability to calculate the priority for each post by looking at the number of comments.&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&#34;aligncenter size-full wp-image-12275&#34; src=&#34;http://getflywheel.com/wp-content/uploads/2015/08/google-xml-sitemaps.jpg&#34; alt=&#34;google-xml-sitemaps&#34; width=&#34;1022&#34; height=&#34;653&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;It does require a bit of setup to get up and running. The main settings page has options so you can create the perfect sitemap. Most of the configuration settings can be modified on this same page. Like Yoast, you can easily choose what to exclude. In addition to choosing the number of posts that are listed, you can increase the memory limit and execution time for the sitemap creation process, making this a flexible option.&lt;/p&gt;
-
-&lt;p&gt;This plugin will publish and update the sitemap automatically, so once things are set up, you do not have to do anything else, that easy ways to create a sitemap by default, this is the path to the sitemap: &lt;a href=&#34;http://www.yoursite.com/index.xml&#34;&gt;http://www.yoursite.com/index.xml&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;It’s a good practice to have a sitemap, and as an extra motivator, it’s worth mentioning the fact that there are SEO benefits to having one. On your journey to sitemapping, you will find that there are easy options for creating a sitemap, including great WordPress specific plugins that update and grow along with your site.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Keep checking the &lt;a href=&#34;http://blog.intispace.com/&#34;&gt;intispace blog&lt;/a&gt; for more upcoming tips on starting your own business.&lt;/strong&gt; Also, send us a tweet &lt;a href=&#34;https://twitter.com/intispace&#34;&gt;@intispace&lt;/a&gt; with your own ideas on what makes a great domain name!&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;This article was brought to you by Intispace Netmedia, for scalable wordpress hosting visit our site here &lt;strong&gt;&lt;a href=&#34;https://intispace.com/&#34;&gt;www.intispace.com&lt;/a&gt;&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 </description>
     </item>
     

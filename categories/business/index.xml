@@ -93,6 +93,130 @@ done
     </item>
     
     <item>
+      <title>Upgrade CentOS kernel without Reboot using Ksplice</title>
+      <link>https://riesal.github.io/2016/08/upgrade-centos-kernel-without-reboot-using-ksplice/</link>
+      <pubDate>Wed, 24 Aug 2016 18:04:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/08/upgrade-centos-kernel-without-reboot-using-ksplice/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;It is simply how to allow kernel swap without needing reboot.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Generally, all Linux distributions needs a scheduled reboot once to stay up to date with important kernel security updates. RHN (or other distro vendors) provides Linux kernel security updates.&lt;/p&gt;
+
+&lt;p&gt;&lt;span id=&#34;more-4512&#34;&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;You can apply kernel updates using yum command or apt-get command line options. After each upgrade you need to reboot the server. Ksplice service allows you to skip reboot step and apply hotfixes to kernel without rebooting the server. In this post I will cover a quick installation of Ksplice for RHEL 5.x and try to find out if service is worth every penny.&lt;/p&gt;
+
+&lt;p&gt;The technology and hack behind this looks pretty cool. This is useful if you’ve a small number of Linux based servers and/or you want avoid unscheduled reboot just to apply hotfix to Linux kernel.&lt;/p&gt;
+
+&lt;p&gt;How Do I Install Ksplice?&lt;/p&gt;
+
+&lt;p&gt;First, you need to register with Ksplice. Type the following command to install rpm repo under RHEL 5:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rpm -ivh https://www.ksplice.com/yum/uptrack/centos/ksplice-uptrack-release.noarch.rpm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To install Ksplice, enter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install uptrack
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Edit /etc/uptrack/uptrack.conf, enter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;vi /etc/uptrack/uptrack.conf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Update it as follows (input your access key):&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;############ [Auth] accesskey = ADD-YOUR-ACCESS-KEY-HERE [Network]
+####### Proxy to use when accessing the Uptrack server, of the form
+####### [protocol://][:port]
+####### The proxy must support making HTTPS connections. If this is unset,
+####### Uptrack will look for the https_proxy, HTTPS_PROXY, and http_proxy
+####### environment variables in that order, and then finally look for a
+####### proxy setting in the system-wide GConf database, if available. https_proxy = [Settings]
+####### Automatically install updates at boot time. If this is set, on
+####### reboot into the same kernel, Uptrack will re-install the same set of
+####### updates that were present before the reboot. install_on_reboot = yes
+####### Options configuring the Uptrack cron job.
+#
+####### GUI users will get all notices via the GUI and likely want to set
+####### the following cron options to &amp;ldquo;no&amp;rdquo;.
+####### Cron job will install updates automatically autoinstall = no
+####### Cron job will print a message when new updates are installed.
+####### This option is only relevant if autoinstall = yes cron_output_install = no
+####### Cron job will print a message when new updates are available cron_output_available = no
+####### Cron job will print a message when it encounters errors cron_output_error = no&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Save and close the file.&lt;/p&gt;
+
+&lt;p&gt;How Do I Apply Rebootless Kernel Updates?
+You need to first download and apply updates via RHN:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum -y update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;OR&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum update kernel kernel-headers kernel-devel
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Don’t reboot the box, simply type the following command to apply hotfix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;uptrack-upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To see a list of updates that are currently installed, enter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;uptrack-show -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Sample Email Notification
+You will get an email as follows when updates are available:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://s0.cyberciti.org/uploads/tips/2010/04/ksplice-rhel-update-email.png&#34; alt=&#34;Fig.01: Ksplice Update Notification&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The web interface also provides information about your server and installed kernel updates:
+&lt;img src=&#34;http://s0.cyberciti.org/uploads/tips/2010/04/uptrack-web-interface.png&#34; alt=&#34;Fig.02: Uptrack Web Interface&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Conclusion&lt;/p&gt;
+
+&lt;p&gt;The pricing is as follows:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Monthly price per system First 20 servers : $3.95&lt;/li&gt;
+&lt;li&gt;Beyond 20 servers: $2.95&lt;/li&gt;
+&lt;li&gt;Currently it is free for all Ubuntu users.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Ksplice is a pretty good and stable software. This is useful for Linux admin or business who can not accept downtime for patching. A few business comes in my mind:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Small shop, say 8-12 Linux based servers.&lt;/li&gt;
+&lt;li&gt;Pro-blogging or webmaster servers (a typical setup included one web
+server and one db server). Avoiding downtime means more ad revenue
+for webmasters.&lt;/li&gt;
+&lt;li&gt;Hosting companies – again avoiding downtime means good customer
+satisfactions and less work for sys admins. If you run VM based
+hosting (OpenVZ or XEN based vps) you can avoid downtime too.&lt;/li&gt;
+&lt;li&gt;Small cluster of Linux system, say 6 system – If cluster is using 80%
+of capacity and if one of node rebooted for kernel upgrade, load will
+up for rest of 5 systems. In such case, this service can help to keep
+load under control without rebooting the box. However, this is NOT
+very useful for very large Linux based cluster redundant
+load-balanced servers, routers, switches, firewalls etc. Since your
+cluster is so large that 4-5 servers failing makes no difference to
+the remaining nodes. In some cases it is possible to do geo load
+balancing too.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But I’ve HA Failover Solution In Place…
+100% uptime depends upon lots of factors and and HA solution handles hardware or other failures very well. However, &lt;em&gt;Ksplice service is not all about 100% uptime&lt;/em&gt;, &lt;strong&gt;it is about not rebooting your server for a Linux kernel upgrade&lt;/strong&gt;. You can easily combine Ksplice with HA solution (such as keepalived+nginx reverse proxy) and try to get perfect five 9s. I highly recommend this service for small to medium size business or professional webmasters.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Olympic Joseph Schooling Coronation Complete</title>
       <link>https://riesal.github.io/2016/08/olympic-joseph-schooling-coronation-complete/</link>
       <pubDate>Sat, 13 Aug 2016 16:06:47 &#43;0000</pubDate>
@@ -910,89 +1034,6 @@ Instance metadata is data about your instance that you can use to configure or m
 &lt;p&gt;Once set up, this uses the TinyPNG API to automatically compress images on upload. You can get a free API key for up to 500 images/month which would be plenty for the average blogger.&lt;/p&gt;
 
 &lt;p&gt;If you need to benchmark the speed of your site, or do before/after comparisons with images after optimizing, &lt;a title=&#34;How To Correctly Measure Your Website’s Page Load Time&#34; href=&#34;http://blog.intispace.com/?p=33279&#34; target=&#34;_blank&#34;&gt;follow this guide on how to properly measure the load time of your site&lt;/a&gt;.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>How To Measure Your Website’s Page Load Time</title>
-      <link>https://riesal.github.io/2015/05/how-to-measure-your-websites-page-load-time/</link>
-      <pubDate>Mon, 25 May 2015 00:00:04 &#43;0000</pubDate>
-      
-      <guid>https://riesal.github.io/2015/05/how-to-measure-your-websites-page-load-time/</guid>
-      <description>
-
-&lt;p&gt;When assessing the effectiveness of CDN, W3 Total Cache or any other WordPress caching plugin, it’s important that you are able to correctly measure the page loading time of your website.&lt;/p&gt;
-
-&lt;p&gt;There are several tools available for How To Measure Your Website’s Page Load Time. Our favorite, and the one we think is most accurate, is Pingdom.&lt;/p&gt;
-
-&lt;h2 id=&#34;how-to-use-pingdom&#34;&gt;How To Use Pingdom&lt;/h2&gt;
-
-&lt;div class=&#34;alert info&#34;&gt;
-  Visit: &lt;a href=&#34;http://tools.pingdom.com/&#34; target=&#34;_blank&#34;&gt;http://tools.pingdom.com/&lt;/a&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Click Settings and choose the location closest to your web server, not your own physical location. Paste in your website URL and click Test Now.&lt;span id=&#34;more-283&#34;&gt;&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;Pingdom will summarize your web page performance at the top with 4 metrics:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Performance grade.&lt;/li&gt;
-&lt;li&gt;Requests.&lt;/li&gt;
-&lt;li&gt;Load time.&lt;/li&gt;
-&lt;li&gt;Page size.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img class=&#34;aligncenter size-full wp-image-286  lazyautosizes lazyloaded&#34; src=&#34;http://cdn.wp-rocket.me/wp-content/uploads/4/Website-speed-test-1.jpg&#34; alt=&#34;Pindgom website speed test&#34; width=&#34;639&#34; height=&#34;553&#34; data-lazy-src=&#34;http://cdn.wp-rocket.me/wp-content/uploads/4/Website-speed-test-1.jpg&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Of these metrics, the most important is load time!&lt;/p&gt;
-
-&lt;p&gt;The grade is a general guideline of how well your site is optimized, but it’s not important to get a perfect score there.&lt;/p&gt;
-
-&lt;p&gt;The speed at which your site loads is really the only number that matters. When Google is visiting your site, it does not care or know about the performance grade, only the loading time.&lt;/p&gt;
-
-&lt;h2 id=&#34;getting-an-accurate-average&#34;&gt;Getting An Accurate Average&lt;/h2&gt;
-
-&lt;p&gt;You should run the test several times to get an average loading time since it will not be identical every time.&lt;/p&gt;
-
-&lt;p&gt;If you have just added caching to your site, or have changed any options in your caching plugin, the first time a visitor (including a Pingdom bot) hits your page (unless it’s been preloaded), they will get a non-cached version of the page. That visit causes the cache to be generated, so the next visitor will get the faster, cached version.&lt;/p&gt;
-
-&lt;p&gt;So when you run the speed test, the first result could possibly be on a non-cached version of your page which is why it’s important to run the test a few times.&lt;/p&gt;
-
-&lt;p&gt;Intispace + Cloudflare will preload the homepage of your site and the pages linked from it when you either manually click the Preload button, when the cache has expired or when you create or update a post.&lt;/p&gt;
-
-&lt;p&gt;Additionally, when you create/update content the cache is deleted and preloaded a few seconds later for associated content such as category and tag archive pages.&lt;/p&gt;
-
-&lt;p&gt;If you simply use the Clear Cache feature or just save the settings, the preload won’t get triggered. So either trigger it manually, or just visit your website to generate the cache.&lt;/p&gt;
-
-&lt;p&gt;Most people only test the homepage of their site which typically has a lot more content on it than a regular page or post. So consider testing various types of content on your site to get a more well-rounded view of how fast your site is as a whole.&lt;/p&gt;
-
-&lt;p&gt;On many websites, visitors finding the site from a search engine will enter your site on a blog post or individual page, not necessarily the homepage, so the performance of all pages needs to be fast. You’ll probably find that those internal posts/pages load faster than your homepage.&lt;/p&gt;
-
-&lt;h2 id=&#34;benchmarking&#34;&gt;Benchmarking&lt;/h2&gt;
-
-&lt;p&gt;To really see how much improvement you’re getting from your caching plugin you need to benchmark your site without any caching plugins first by running the above tests and taking an average page load time.&lt;/p&gt;
-
-&lt;p&gt;Then add your caching plugin with its most basic configuration and run the tests a few more times to get a comparison.&lt;/p&gt;
-
-&lt;p&gt;Any time you activate a new option in the plugin you need to see if it has an impact – for better or worse, so you need to test each change that you make, in the above manner.&lt;/p&gt;
-
-&lt;p&gt;A lot of people turn on W3 Total Cache for example and enable ALL the additional options but find some slowness. This could be because additional options such as minification and others have the potential to conflict with themes, plugins and server configurations and should be used cautiously. They are not always necessary. Just turning on the plugin will give you the most significant speed boost. The additional options are just that – optional. They are not always necessary and should always be tested to see if they are giving you additional improvements.&lt;/p&gt;
-
-&lt;p&gt;Testing after every change lets you isolate a particular feature that may be causing an issue. This is true of W# Total Cache or any of the other caching plugins you may use.&lt;/p&gt;
-
-&lt;p&gt;Also, make sure you don’t have multiple caching plugins running at once. For example, even if WP Super Cache is installed but not activated, it can still interfere so it needs to be fully deleted before testing a different plugin.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-waterfall-chart&#34;&gt;The Waterfall Chart&lt;/h2&gt;
-
-&lt;p&gt;The waterfall shows you the loading time of each component of your page – all the various image files, CSS, Javascript files etc that are loaded each time someone visits your page.&lt;/p&gt;
-
-&lt;p&gt;If you are using a caching plugin such as W3 Total Cache you should be getting a fast loading time, but the waterfall chart can help you identify any bottlenecks or problematic files. Sometimes it only takes a couple of large images or external scripts to drag down the loading time of your page.&lt;/p&gt;
-
-&lt;p&gt;Click on the dropdown at the top of the waterfall and choose “Sort By Load Time”. This will show you the longest loading files at the top, making problem files easy to spot.&lt;/p&gt;
-
-&lt;p&gt;External scripts such as those from third party ad servers etc are probably your biggest enemy here. Since those scripts are not coming from your server there is no caching you can do on them – you are at the mercy of their server. You can see that in this example:&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&#34;size-full wp-image-285 aligncenter  lazyautosizes lazyloaded&#34; src=&#34;http://cdn.wp-rocket.me/wp-content/uploads/4/sort-by-load-time.jpg&#34; alt=&#34;Pingdom - Sort By Load Time&#34; width=&#34;639&#34; height=&#34;114&#34; data-lazy-src=&#34;http://cdn.wp-rocket.me/wp-content/uploads/4/sort-by-load-time.jpg&#34; /&gt;&lt;/p&gt;
 </description>
     </item>
     

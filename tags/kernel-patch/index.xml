@@ -92,5 +92,129 @@ done
 </description>
     </item>
     
+    <item>
+      <title>Upgrade CentOS kernel without Reboot using Ksplice</title>
+      <link>https://riesal.github.io/2016/08/upgrade-centos-kernel-without-reboot-using-ksplice/</link>
+      <pubDate>Wed, 24 Aug 2016 18:04:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/08/upgrade-centos-kernel-without-reboot-using-ksplice/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;It is simply how to allow kernel swap without needing reboot.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Generally, all Linux distributions needs a scheduled reboot once to stay up to date with important kernel security updates. RHN (or other distro vendors) provides Linux kernel security updates.&lt;/p&gt;
+
+&lt;p&gt;&lt;span id=&#34;more-4512&#34;&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;You can apply kernel updates using yum command or apt-get command line options. After each upgrade you need to reboot the server. Ksplice service allows you to skip reboot step and apply hotfixes to kernel without rebooting the server. In this post I will cover a quick installation of Ksplice for RHEL 5.x and try to find out if service is worth every penny.&lt;/p&gt;
+
+&lt;p&gt;The technology and hack behind this looks pretty cool. This is useful if you’ve a small number of Linux based servers and/or you want avoid unscheduled reboot just to apply hotfix to Linux kernel.&lt;/p&gt;
+
+&lt;p&gt;How Do I Install Ksplice?&lt;/p&gt;
+
+&lt;p&gt;First, you need to register with Ksplice. Type the following command to install rpm repo under RHEL 5:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rpm -ivh https://www.ksplice.com/yum/uptrack/centos/ksplice-uptrack-release.noarch.rpm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To install Ksplice, enter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install uptrack
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Edit /etc/uptrack/uptrack.conf, enter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;vi /etc/uptrack/uptrack.conf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Update it as follows (input your access key):&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;############ [Auth] accesskey = ADD-YOUR-ACCESS-KEY-HERE [Network]
+####### Proxy to use when accessing the Uptrack server, of the form
+####### [protocol://][:port]
+####### The proxy must support making HTTPS connections. If this is unset,
+####### Uptrack will look for the https_proxy, HTTPS_PROXY, and http_proxy
+####### environment variables in that order, and then finally look for a
+####### proxy setting in the system-wide GConf database, if available. https_proxy = [Settings]
+####### Automatically install updates at boot time. If this is set, on
+####### reboot into the same kernel, Uptrack will re-install the same set of
+####### updates that were present before the reboot. install_on_reboot = yes
+####### Options configuring the Uptrack cron job.
+#
+####### GUI users will get all notices via the GUI and likely want to set
+####### the following cron options to &amp;ldquo;no&amp;rdquo;.
+####### Cron job will install updates automatically autoinstall = no
+####### Cron job will print a message when new updates are installed.
+####### This option is only relevant if autoinstall = yes cron_output_install = no
+####### Cron job will print a message when new updates are available cron_output_available = no
+####### Cron job will print a message when it encounters errors cron_output_error = no&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Save and close the file.&lt;/p&gt;
+
+&lt;p&gt;How Do I Apply Rebootless Kernel Updates?
+You need to first download and apply updates via RHN:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum -y update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;OR&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum update kernel kernel-headers kernel-devel
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Don’t reboot the box, simply type the following command to apply hotfix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;uptrack-upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To see a list of updates that are currently installed, enter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;uptrack-show -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Sample Email Notification
+You will get an email as follows when updates are available:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://s0.cyberciti.org/uploads/tips/2010/04/ksplice-rhel-update-email.png&#34; alt=&#34;Fig.01: Ksplice Update Notification&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The web interface also provides information about your server and installed kernel updates:
+&lt;img src=&#34;http://s0.cyberciti.org/uploads/tips/2010/04/uptrack-web-interface.png&#34; alt=&#34;Fig.02: Uptrack Web Interface&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Conclusion&lt;/p&gt;
+
+&lt;p&gt;The pricing is as follows:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Monthly price per system First 20 servers : $3.95&lt;/li&gt;
+&lt;li&gt;Beyond 20 servers: $2.95&lt;/li&gt;
+&lt;li&gt;Currently it is free for all Ubuntu users.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Ksplice is a pretty good and stable software. This is useful for Linux admin or business who can not accept downtime for patching. A few business comes in my mind:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Small shop, say 8-12 Linux based servers.&lt;/li&gt;
+&lt;li&gt;Pro-blogging or webmaster servers (a typical setup included one web
+server and one db server). Avoiding downtime means more ad revenue
+for webmasters.&lt;/li&gt;
+&lt;li&gt;Hosting companies – again avoiding downtime means good customer
+satisfactions and less work for sys admins. If you run VM based
+hosting (OpenVZ or XEN based vps) you can avoid downtime too.&lt;/li&gt;
+&lt;li&gt;Small cluster of Linux system, say 6 system – If cluster is using 80%
+of capacity and if one of node rebooted for kernel upgrade, load will
+up for rest of 5 systems. In such case, this service can help to keep
+load under control without rebooting the box. However, this is NOT
+very useful for very large Linux based cluster redundant
+load-balanced servers, routers, switches, firewalls etc. Since your
+cluster is so large that 4-5 servers failing makes no difference to
+the remaining nodes. In some cases it is possible to do geo load
+balancing too.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But I’ve HA Failover Solution In Place…
+100% uptime depends upon lots of factors and and HA solution handles hardware or other failures very well. However, &lt;em&gt;Ksplice service is not all about 100% uptime&lt;/em&gt;, &lt;strong&gt;it is about not rebooting your server for a Linux kernel upgrade&lt;/strong&gt;. You can easily combine Ksplice with HA solution (such as keepalived+nginx reverse proxy) and try to get perfect five 9s. I highly recommend this service for small to medium size business or professional webmasters.&lt;/p&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>

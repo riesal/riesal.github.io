@@ -4,7 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <title> Kernel Patch &middot; Muhammad Fahrizal Rahman </title>
+    <title> Upgrade CentOS kernel without Reboot using Ksplice &middot; Muhammad Fahrizal Rahman </title>
     
     <link rel="stylesheet" type="text/css" href="https://riesal.github.io/css/uno.min.css" />
     <link rel="stylesheet" type="text/css" href="https://riesal.github.io/css/lightGallery.css" />
@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.ico">
     
-    <link href="https://riesal.github.io/tags/kernel-patch/index.xml" rel="alternate" type="application/rss+xml" title="Muhammad Fahrizal Rahman" />
+    <link href="" rel="alternate" type="application/rss+xml" title="Muhammad Fahrizal Rahman" />
     
     <script src="https://riesal.github.io/js/jquery.min.js"></script>
     <script src="https://riesal.github.io/js/main.min.js">
@@ -27,9 +27,7 @@
     </span>
     <header class="
         
-        
             panel-cover panel-cover--collapsed
-        
         "  style="background-image: url(/images/background-cover.jpg)" >
     <div class="panel-main">
         <div class="panel-main__inner panel-inverted">
@@ -146,22 +144,126 @@
 
         <div class="content-wrapper">
             <div class="content-wrapper__inner">
-                
-                <h2>2016</h2>
-                <ul id="list">
-                    
-                    <li>
-                        <a href="https://riesal.github.io/2016/08/kgraft-to-patch-ubuntu-kernel-without-reboot/">kgraft to Patch Ubuntu Kernel without Reboot </a>
-                        <div class="meta">Thu, Aug 25, 2016</div>
-                    </li>
-                    
-                    <li>
-                        <a href="https://riesal.github.io/2016/08/upgrade-centos-kernel-without-reboot-using-ksplice/">Upgrade CentOS kernel without Reboot using Ksplice </a>
-                        <div class="meta">Wed, Aug 24, 2016</div>
-                    </li>
-                    
-                </ul>
-                
+                <div class="post">
+                    <h1>Upgrade CentOS kernel without Reboot using Ksplice</h1>
+                    <span class="post-date">Wed, Aug 24, 2016</span>
+                    <p><strong>It is simply how to allow kernel swap without needing reboot.</strong></p>
+
+<p>Generally, all Linux distributions needs a scheduled reboot once to stay up to date with important kernel security updates. RHN (or other distro vendors) provides Linux kernel security updates.</p>
+
+<p><span id="more-4512"></span></p>
+
+<p>You can apply kernel updates using yum command or apt-get command line options. After each upgrade you need to reboot the server. Ksplice service allows you to skip reboot step and apply hotfixes to kernel without rebooting the server. In this post I will cover a quick installation of Ksplice for RHEL 5.x and try to find out if service is worth every penny.</p>
+
+<p>The technology and hack behind this looks pretty cool. This is useful if you’ve a small number of Linux based servers and/or you want avoid unscheduled reboot just to apply hotfix to Linux kernel.</p>
+
+<p>How Do I Install Ksplice?</p>
+
+<p>First, you need to register with Ksplice. Type the following command to install rpm repo under RHEL 5:</p>
+
+<pre><code>rpm -ivh https://www.ksplice.com/yum/uptrack/centos/ksplice-uptrack-release.noarch.rpm
+</code></pre>
+
+<p>To install Ksplice, enter:</p>
+
+<pre><code>yum install uptrack
+</code></pre>
+
+<p>Edit /etc/uptrack/uptrack.conf, enter:</p>
+
+<pre><code>vi /etc/uptrack/uptrack.conf
+</code></pre>
+
+<p>Update it as follows (input your access key):</p>
+
+<blockquote>
+<p>############ [Auth] accesskey = ADD-YOUR-ACCESS-KEY-HERE [Network]
+####### Proxy to use when accessing the Uptrack server, of the form
+####### [protocol://][:port]
+####### The proxy must support making HTTPS connections. If this is unset,
+####### Uptrack will look for the https_proxy, HTTPS_PROXY, and http_proxy
+####### environment variables in that order, and then finally look for a
+####### proxy setting in the system-wide GConf database, if available. https_proxy = [Settings]
+####### Automatically install updates at boot time. If this is set, on
+####### reboot into the same kernel, Uptrack will re-install the same set of
+####### updates that were present before the reboot. install_on_reboot = yes
+####### Options configuring the Uptrack cron job.
+#
+####### GUI users will get all notices via the GUI and likely want to set
+####### the following cron options to &ldquo;no&rdquo;.
+####### Cron job will install updates automatically autoinstall = no
+####### Cron job will print a message when new updates are installed.
+####### This option is only relevant if autoinstall = yes cron_output_install = no
+####### Cron job will print a message when new updates are available cron_output_available = no
+####### Cron job will print a message when it encounters errors cron_output_error = no</p>
+</blockquote>
+
+<p>Save and close the file.</p>
+
+<p>How Do I Apply Rebootless Kernel Updates?
+You need to first download and apply updates via RHN:</p>
+
+<pre><code>yum -y update
+</code></pre>
+
+<p>OR</p>
+
+<pre><code>yum update kernel kernel-headers kernel-devel
+</code></pre>
+
+<p>Don’t reboot the box, simply type the following command to apply hotfix:</p>
+
+<pre><code>uptrack-upgrade
+</code></pre>
+
+<p>To see a list of updates that are currently installed, enter:</p>
+
+<pre><code>uptrack-show -y
+</code></pre>
+
+<p>Sample Email Notification
+You will get an email as follows when updates are available:</p>
+
+<p><img src="http://s0.cyberciti.org/uploads/tips/2010/04/ksplice-rhel-update-email.png" alt="Fig.01: Ksplice Update Notification" /></p>
+
+<p>The web interface also provides information about your server and installed kernel updates:
+<img src="http://s0.cyberciti.org/uploads/tips/2010/04/uptrack-web-interface.png" alt="Fig.02: Uptrack Web Interface" /></p>
+
+<p>Conclusion</p>
+
+<p>The pricing is as follows:</p>
+
+<ul>
+<li>Monthly price per system First 20 servers : $3.95</li>
+<li>Beyond 20 servers: $2.95</li>
+<li>Currently it is free for all Ubuntu users.</li>
+</ul>
+
+<p>Ksplice is a pretty good and stable software. This is useful for Linux admin or business who can not accept downtime for patching. A few business comes in my mind:</p>
+
+<ul>
+<li>Small shop, say 8-12 Linux based servers.</li>
+<li>Pro-blogging or webmaster servers (a typical setup included one web
+server and one db server). Avoiding downtime means more ad revenue
+for webmasters.</li>
+<li>Hosting companies – again avoiding downtime means good customer
+satisfactions and less work for sys admins. If you run VM based
+hosting (OpenVZ or XEN based vps) you can avoid downtime too.</li>
+<li>Small cluster of Linux system, say 6 system – If cluster is using 80%
+of capacity and if one of node rebooted for kernel upgrade, load will
+up for rest of 5 systems. In such case, this service can help to keep
+load under control without rebooting the box. However, this is NOT
+very useful for very large Linux based cluster redundant
+load-balanced servers, routers, switches, firewalls etc. Since your
+cluster is so large that 4-5 servers failing makes no difference to
+the remaining nodes. In some cases it is possible to do geo load
+balancing too.</li>
+</ul>
+
+<p>But I’ve HA Failover Solution In Place…
+100% uptime depends upon lots of factors and and HA solution handles hardware or other failures very well. However, <em>Ksplice service is not all about 100% uptime</em>, <strong>it is about not rebooting your server for a Linux kernel upgrade</strong>. You can easily combine Ksplice with HA solution (such as keepalived+nginx reverse proxy) and try to get perfect five 9s. I highly recommend this service for small to medium size business or professional webmasters.</p>
+
+                </div>
             </div>
         </div>
     </body>
