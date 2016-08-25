@@ -128,8 +128,10 @@ done
 &lt;p&gt;Update it as follows (input your access key):&lt;/p&gt;
 
 &lt;p&gt;[Auth]&lt;/br&gt;
-accesskey = ADD-YOUR-ACCESS-KEY-HERE [Network]&lt;/br&gt;
-https_proxy = [Settings]&lt;/br&gt;
+accesskey = ADD-YOUR-ACCESS-KEY-HERE&lt;/br&gt;
+[Network]&lt;/br&gt;
+https_proxy = &lt;/br&gt;
+[Settings]&lt;/br&gt;
 install_on_reboot = yes&lt;/br&gt;
 autoinstall = no&lt;/br&gt;
 cron_output_install = no&lt;/br&gt;
