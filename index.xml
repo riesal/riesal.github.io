@@ -10,21 +10,25 @@
     <updated>Thu, 25 Aug 2016 15:06:28 &#43;0000</updated>
     
     <item>
-      <title>Upgrade Ubuntu Kernel without Reboot</title>
-      <link>https://riesal.github.io/2016/08/upgrade-ubuntu-kernel-without-reboot/</link>
+      <title>kgraft to Patch Ubuntu Kernel without Reboot</title>
+      <link>https://riesal.github.io/2016/08/kgraft-to-patch-ubuntu-kernel-without-reboot/</link>
       <pubDate>Thu, 25 Aug 2016 15:06:28 &#43;0000</pubDate>
       
-      <guid>https://riesal.github.io/2016/08/upgrade-ubuntu-kernel-without-reboot/</guid>
+      <guid>https://riesal.github.io/2016/08/kgraft-to-patch-ubuntu-kernel-without-reboot/</guid>
       <description>&lt;p&gt;&lt;strong&gt;It is simply how to allow kernel swap without needing reboot.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Article by: &lt;a href=&#34;http://dinosaursareforever.blogspot.co.id/&#34;&gt;arges&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;New live kernel patching projects have hit LKML recently&lt;a href=&#34;https://lkml.org/lkml/2014/4/30/477&#34;&gt; [1]&lt;/a&gt;&lt;a href=&#34;https://lkml.org/lkml/2014/5/1/273&#34;&gt;[2]&lt;/a&gt;, and I&amp;rsquo;ve taken the opportunity to test drive kGraft with the Ubuntu kernel. This post documents how to get a sample patch working.&lt;/p&gt;
 
 &lt;p&gt;&lt;span id=&#34;more-4512&#34;&gt;&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;A Simple Example
-First, I had to take the patches from [3] and apply them against the ubuntu-utopic kernel, which is based on 3.15-rc8 as of this post. They cherry-picked cleanly and the branch I&amp;rsquo;m using is stored here [4]. In addition to applying the patches I had to also enable CONFIG_KGRAFT. A pre-built test kernel can be downloaded here [5].&lt;/p&gt;
+First, I had to take the patches from &lt;a href=&#34;https://git.kernel.org/cgit/linux/kernel/git/jirislaby/kgraft.git/&#34;&gt; [3]&lt;/a&gt; and apply them against the ubuntu-utopic kernel, which is based on 3.15-rc8 as of this post. They cherry-picked cleanly and the branch I&amp;rsquo;m using is stored here &lt;a href=&#34;http://zinc.ubuntu.com/git?p=arges/ubuntu-utopic.git;a=shortlog;h=refs/heads/kgraft-utopic&#34;&gt; [4]&lt;/a&gt;. In addition to applying the patches I had to also enable CONFIG_KGRAFT. A pre-built test kernel can be downloaded here &lt;a href=&#34;http://people.canonical.com/~arges/kgraft-utopic/&#34;&gt; [5]&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Next, I created a test VM and installed the test kernel, headers, and build dependencies into that VM and rebooted. Now after a successful reboot, we need to produce an actual patch to test. I&amp;rsquo;ve created a github project [6] with the sample patch; to make it easy to clone and get started.&lt;/p&gt;
+&lt;p&gt;Next, I created a test VM and installed the test kernel, headers, and build dependencies into that VM and rebooted. Now after a successful reboot, we need to produce an actual patch to test. I&amp;rsquo;ve created a github project &lt;a href=&#34;https://github.com/arges/kgraft-examples&#34;&gt; [6]&lt;/a&gt; with the sample patch; to make it easy to clone and get started.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;sudo apt-get install git build-essential
 git clone https://github.com/arges/kgraft-examples.git

@@ -4,7 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <title> Kernel Patch &middot; Muhammad Fahrizal Rahman </title>
+    <title> kgraft to Patch Ubuntu Kernel without Reboot &middot; Muhammad Fahrizal Rahman </title>
     
     <link rel="stylesheet" type="text/css" href="https://riesal.github.io/css/uno.min.css" />
     <link rel="stylesheet" type="text/css" href="https://riesal.github.io/css/lightGallery.css" />
@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.ico">
     
-    <link href="https://riesal.github.io/tags/kernel-patch/index.xml" rel="alternate" type="application/rss+xml" title="Muhammad Fahrizal Rahman" />
+    <link href="" rel="alternate" type="application/rss+xml" title="Muhammad Fahrizal Rahman" />
     
     <script src="https://riesal.github.io/js/jquery.min.js"></script>
     <script src="https://riesal.github.io/js/main.min.js">
@@ -27,9 +27,7 @@
     </span>
     <header class="
         
-        
             panel-cover panel-cover--collapsed
-        
         "  style="background-image: url(/images/background-cover.jpg)" >
     <div class="panel-main">
         <div class="panel-main__inner panel-inverted">
@@ -146,17 +144,85 @@
 
         <div class="content-wrapper">
             <div class="content-wrapper__inner">
-                
-                <h2>2016</h2>
-                <ul id="list">
-                    
-                    <li>
-                        <a href="https://riesal.github.io/2016/08/kgraft-to-patch-ubuntu-kernel-without-reboot/">kgraft to Patch Ubuntu Kernel without Reboot </a>
-                        <div class="meta">Thu, Aug 25, 2016</div>
-                    </li>
-                    
-                </ul>
-                
+                <div class="post">
+                    <h1>kgraft to Patch Ubuntu Kernel without Reboot</h1>
+                    <span class="post-date">Thu, Aug 25, 2016</span>
+                    <p><strong>It is simply how to allow kernel swap without needing reboot.</strong></p>
+
+<blockquote>
+<p>Article by: <a href="http://dinosaursareforever.blogspot.co.id/">arges</a></p>
+</blockquote>
+
+<p>New live kernel patching projects have hit LKML recently<a href="https://lkml.org/lkml/2014/4/30/477"> [1]</a><a href="https://lkml.org/lkml/2014/5/1/273">[2]</a>, and I&rsquo;ve taken the opportunity to test drive kGraft with the Ubuntu kernel. This post documents how to get a sample patch working.</p>
+
+<p><span id="more-4512"></span></p>
+
+<p>A Simple Example
+First, I had to take the patches from <a href="https://git.kernel.org/cgit/linux/kernel/git/jirislaby/kgraft.git/"> [3]</a> and apply them against the ubuntu-utopic kernel, which is based on 3.15-rc8 as of this post. They cherry-picked cleanly and the branch I&rsquo;m using is stored here <a href="http://zinc.ubuntu.com/git?p=arges/ubuntu-utopic.git;a=shortlog;h=refs/heads/kgraft-utopic"> [4]</a>. In addition to applying the patches I had to also enable CONFIG_KGRAFT. A pre-built test kernel can be downloaded here <a href="http://people.canonical.com/~arges/kgraft-utopic/"> [5]</a>.</p>
+
+<p>Next, I created a test VM and installed the test kernel, headers, and build dependencies into that VM and rebooted. Now after a successful reboot, we need to produce an actual patch to test. I&rsquo;ve created a github project <a href="https://github.com/arges/kgraft-examples"> [6]</a> with the sample patch; to make it easy to clone and get started.</p>
+
+<pre><code>sudo apt-get install git build-essential
+git clone https://github.com/arges/kgraft-examples.git
+cd kgraft-examples
+make
+</code></pre>
+
+<p>The code in kgraft_patcher.c is the example found in samples/kgraft [7]. Now we can build it easily using the Makefile I have in my project by typing make.</p>
+
+<p>Next, the module needs to be inserted using the following:</p>
+
+<pre><code>sudo insmod ./kgraft_patcher.ko
+</code></pre>
+
+<p>Run the following to see if the module loaded properly:</p>
+
+<pre><code>lsmod | grep kgraft
+</code></pre>
+
+<p>You&rsquo;ll notice some messages printed with the following:</p>
+
+<blockquote>
+<p>[  211.762563] kgraft_patcher: module verification failed: signature
+and/or  required key missing - tainting kernel [  216.800080] kgr
+failed after timeout (30), still in degraded mode [  246.880146] kgr
+failed after timeout (30), still in degraded mode [  276.960211] kgr
+failed after timeout (30), still in degraded mode</p>
+</blockquote>
+
+<p>This means that not all processes have entered the kernel and may not have a &ldquo;new universe&rdquo; flag set.  Run the following to see which processes still needs to be updated.</p>
+
+<pre><code>cat /proc/*/kgr_in_progress
+</code></pre>
+
+<p>In order to get all processes to enter the kernel sometimes a signal needs to be sent to get the process to enter the kernel.</p>
+
+<p>An example of this is found in the kgraft-examples [6] called &lsquo;gethurry.sh&rsquo;:</p>
+
+<pre><code>#!/bin/bash
+for p in $(ls /proc/ | grep '^[0-9]'); do
+  if [[ -e /proc/$p/kgr_in_progress ]]; then
+    if [[ `sudo cat /proc/$p/kgr_in_progress` -eq 1 ]]; then
+     echo $p;
+     sudo kill -SIGCONT $p
+    fi
+  fi
+done
+</code></pre>
+
+<p>Here is checks for all processes that have &lsquo;kgr_in_progress&rsquo; set and sends a SIGCONT signal to that process.</p>
+
+<p>I&rsquo;ve noticed that I had to also send a SIGSTOP followed by a SIGCONT to finally get everything synced up.</p>
+
+<p>Eventually you&rsquo;ll see:</p>
+
+<blockquote>
+<p>[ 1600.480233] kgr succeeded</p>
+</blockquote>
+
+<p>Now your kernel is running the new patch without rebooting!</p>
+
+                </div>
             </div>
         </div>
     </body>
