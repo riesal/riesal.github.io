@@ -32,6 +32,85 @@
     </item>
     
     <item>
+      <title>Upgrade Ubuntu Kernel without Reboot</title>
+      <link>https://riesal.github.io/2016/08/upgrade-ubuntu-kernel-without-reboot/</link>
+      <pubDate>Sat, 13 Aug 2016 16:06:47 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/08/upgrade-ubuntu-kernel-without-reboot/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;It is simply how to allow kernel swap without needing reboot.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;New live kernel patching projects have hit LKML recently&lt;a href=&#34;https://lkml.org/lkml/2014/4/30/477&#34;&gt; [1]&lt;/a&gt;&lt;a href=&#34;https://lkml.org/lkml/2014/5/1/273&#34;&gt;[2]&lt;/a&gt;, and I&amp;rsquo;ve taken the opportunity to test drive kGraft with the Ubuntu kernel. This post documents how to get a sample patch working.&lt;/p&gt;
+
+&lt;p&gt;&lt;span id=&#34;more-4512&#34;&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;A Simple Example
+First, I had to take the patches from [3] and apply them against the ubuntu-utopic kernel, which is based on 3.15-rc8 as of this post. They cherry-picked cleanly and the branch I&amp;rsquo;m using is stored here [4]. In addition to applying the patches I had to also enable CONFIG_KGRAFT. A pre-built test kernel can be downloaded here [5].&lt;/p&gt;
+
+&lt;p&gt;Next, I created a test VM and installed the test kernel, headers, and build dependencies into that VM and rebooted. Now after a successful reboot, we need to produce an actual patch to test. I&amp;rsquo;ve created a github project [6] with the sample patch; to make it easy to clone and get started.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo apt-get install git build-essential
+git clone https://github.com/arges/kgraft-examples.git
+cd kgraft-examples
+make
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The code in kgraft_patcher.c is the example found in samples/kgraft [7]. Now we can build it easily using the Makefile I have in my project by typing make.&lt;/p&gt;
+
+&lt;p&gt;Next, the module needs to be inserted using the following:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo insmod ./kgraft_patcher.ko
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Run the following to see if the module loaded properly:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lsmod | grep kgraft
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You&amp;rsquo;ll notice some messages printed with the following:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;[  211.762563] kgraft_patcher: module verification failed: signature
+and/or  required key missing - tainting kernel [  216.800080] kgr
+failed after timeout (30), still in degraded mode [  246.880146] kgr
+failed after timeout (30), still in degraded mode [  276.960211] kgr
+failed after timeout (30), still in degraded mode&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This means that not all processes have entered the kernel and may not have a &amp;ldquo;new universe&amp;rdquo; flag set.  Run the following to see which processes still needs to be updated.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cat /proc/*/kgr_in_progress
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In order to get all processes to enter the kernel sometimes a signal needs to be sent to get the process to enter the kernel.&lt;/p&gt;
+
+&lt;p&gt;An example of this is found in the kgraft-examples [6] called &amp;lsquo;gethurry.sh&amp;rsquo;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/bash
+for p in $(ls /proc/ | grep &#39;^[0-9]&#39;); do
+  if [[ -e /proc/$p/kgr_in_progress ]]; then
+    if [[ `sudo cat /proc/$p/kgr_in_progress` -eq 1 ]]; then
+     echo $p;
+     sudo kill -SIGCONT $p
+    fi
+  fi
+done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is checks for all processes that have &amp;lsquo;kgr_in_progress&amp;rsquo; set and sends a SIGCONT signal to that process.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve noticed that I had to also send a SIGSTOP followed by a SIGCONT to finally get everything synced up.&lt;/p&gt;
+
+&lt;p&gt;Eventually you&amp;rsquo;ll see:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;[ 1600.480233] kgr succeeded&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Now your kernel is running the new patch without rebooting!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Get the AWS EC2 instance metadata</title>
       <link>https://riesal.github.io/2016/05/get-the-aws-ec2-instance-metadata/</link>
       <pubDate>Thu, 21 Jul 2016 16:06:47 &#43;0000</pubDate>
@@ -910,49 +989,6 @@ Instance metadata is data about your instance that you can use to configure or m
 &lt;p&gt;External scripts such as those from third party ad servers etc are probably your biggest enemy here. Since those scripts are not coming from your server there is no caching you can do on them – you are at the mercy of their server. You can see that in this example:&lt;/p&gt;
 
 &lt;p&gt;&lt;img class=&#34;size-full wp-image-285 aligncenter  lazyautosizes lazyloaded&#34; src=&#34;http://cdn.wp-rocket.me/wp-content/uploads/4/sort-by-load-time.jpg&#34; alt=&#34;Pingdom - Sort By Load Time&#34; width=&#34;639&#34; height=&#34;114&#34; data-lazy-src=&#34;http://cdn.wp-rocket.me/wp-content/uploads/4/sort-by-load-time.jpg&#34; /&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Intispace Platform Improvements, And How You Benefit</title>
-      <link>https://riesal.github.io/2015/05/intispace-platform-improvements-and-how-you-benefit/</link>
-      <pubDate>Sun, 24 May 2015 13:43:13 &#43;0000</pubDate>
-      
-      <guid>https://riesal.github.io/2015/05/intispace-platform-improvements-and-how-you-benefit/</guid>
-      <description>
-
-&lt;p&gt;One of our goals here at Intispace is to continue innovating and improving our platform so you can get the absolute most out of it. And late last year and early this year we made a host of intispace platform improvements to our platform that give all Intispace customers better performance, tighter security, and updated caching. Intispace Platform Improvements, And How You Benefit, Combined, these improvements result in faster, more reliable, and more secure WordPress sites.&lt;/p&gt;
-
-&lt;p&gt;Let’s take a quick look at some of our recent platform improvements and how you benefit from them as a Intispace customer:&lt;/p&gt;
-
-&lt;h2 id=&#34;performance&#34;&gt;Performance&lt;/h2&gt;
-
-&lt;p&gt;Intispace Platform Improvements, And How You Benefit. We’re in the process of updating our platform to PHP 5.5, Ubuntu 14.04, and MySQL 5.6. These upgrades individually deliver huge performance gains, and when combined they can account for nearly a 50 percent increase in speed for our customers. Thousands of our customers have already been moved into the new platform, and all new customers are on this platform already.  We continue to actively migrate customers, and we’ll send you an email as part of the migration process.&lt;/p&gt;
-
-&lt;p&gt;We have also improved our performance monitoring and our hotspot identification and now use it to actively drive performance improvements in our platform. Proactive performance monitoring helps us identify customers who may have performance issues. Our team digs in and finds the root cause of the issue and pushes the improvements upstream–into WordPress, plugins, or our platform, which benefits a larger set of customers and allows us to drive  improvements in the performance and scalability of third-party plugins. So far, this effort has resulted in:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Improvements to the way we do object caching&lt;/li&gt;
-&lt;li&gt;Improvements to our baseline database configuration and schema&lt;/li&gt;
-&lt;li&gt;Several changes in third-party plugins to make them operate better at scale&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&#34;security&#34;&gt;Security&lt;/h2&gt;
-
-&lt;p&gt;We continue to improve our malicious traffic detection and blocking (web application firewall), which reduces overall server load and protects your WordPress sites from attackers. The attacks that we block include:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Exploits against several plugins, such as the RevSlider vulnerability, that attempt unauthorized downloads of php files, configuration files, /etc/passwd, and more.&lt;/li&gt;
-&lt;li&gt;Attempts to gain unauthorized access to wp-admin.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;This improvement was put into action recently and complete well before the public announcement.&lt;/p&gt;
-
-&lt;h2 id=&#34;caching&#34;&gt;Caching&lt;/h2&gt;
-
-&lt;p&gt;We’ve also improved our caching for mobile sites by updating how our platform handles mobile search engine bots. Previously, mobile-specific bots could be served cached versions of non-mobile-optimized pages. This is an important improvement for sites that serve different content to mobile users.&lt;/p&gt;
-
-&lt;p&gt;These updates, and the updates we’re currently working on, reaffirm our commitment to all Intispace customers that we’ll continuously innovate and work on ways to intispace platform improvements&lt;/p&gt;
 </description>
     </item>
     
