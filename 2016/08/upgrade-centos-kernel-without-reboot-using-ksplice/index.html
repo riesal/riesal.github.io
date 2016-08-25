@@ -176,27 +176,14 @@
 
 <p>Update it as follows (input your access key):</p>
 
-<blockquote>
-<p>############ [Auth] accesskey = ADD-YOUR-ACCESS-KEY-HERE [Network]
-####### Proxy to use when accessing the Uptrack server, of the form
-####### [protocol://][:port]
-####### The proxy must support making HTTPS connections. If this is unset,
-####### Uptrack will look for the https_proxy, HTTPS_PROXY, and http_proxy
-####### environment variables in that order, and then finally look for a
-####### proxy setting in the system-wide GConf database, if available. https_proxy = [Settings]
-####### Automatically install updates at boot time. If this is set, on
-####### reboot into the same kernel, Uptrack will re-install the same set of
-####### updates that were present before the reboot. install_on_reboot = yes
-####### Options configuring the Uptrack cron job.
-#
-####### GUI users will get all notices via the GUI and likely want to set
-####### the following cron options to &ldquo;no&rdquo;.
-####### Cron job will install updates automatically autoinstall = no
-####### Cron job will print a message when new updates are installed.
-####### This option is only relevant if autoinstall = yes cron_output_install = no
-####### Cron job will print a message when new updates are available cron_output_available = no
-####### Cron job will print a message when it encounters errors cron_output_error = no</p>
-</blockquote>
+<p>[Auth]
+accesskey = ADD-YOUR-ACCESS-KEY-HERE [Network]
+https_proxy = [Settings]
+install_on_reboot = yes
+autoinstall = no
+cron_output_install = no
+cron_output_available = no
+cron_output_error = no</p>
 
 <p>Save and close the file.</p>
 
