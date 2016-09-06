@@ -15,7 +15,7 @@
       <pubDate>Mon, 05 Sep 2016 16:12:28 &#43;0000</pubDate>
       
       <guid>https://riesal.github.io/2016/09/ravendb-at-a-glance-part-2/</guid>
-      <description>&lt;p&gt;RavenDB is built to be a first-class citizen on the .NET platform offering developers the ability to easily extend and embed the database in their applications. A few of the key features that make RavenDB compelling to .NET developers are as follows:&lt;/p&gt;
+      <description>&lt;p&gt;RavenDB is built to be a first-class citizen on the .NET platform offering developers the ability to easily extend and embed the database in their applications. &lt;span id=&#34;more-4512&#34;&gt;&lt;/span&gt; A few of the key features that make RavenDB compelling to .NET developers are as follows:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;RavenDB comes with a fully functional .NET client API, which implements unit of work, change tracking, read and write optimizations, and much more. It also has a REST-based API, so you can access it via the JavaScript directly.&lt;/li&gt;
