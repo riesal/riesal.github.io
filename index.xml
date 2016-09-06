@@ -24,14 +24,16 @@
 &lt;li&gt;The server can be easily extended by adding a custom .NET assembly.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;RavenDB architecture.
-RavenDB leverages existing storage infrastructure called ESENT that is known
+&lt;p&gt;RavenDB architecture.&lt;/p&gt;
+
+&lt;p&gt;RavenDB leverages existing storage infrastructure called ESENT that is known
 to scale to amazing sizes. ESENT is the storage engine utilized by Microsoft Exchange and Active Directory. The storage engine provides the transactional data store for the documents. RavenDB also utilizes another proven technology called Lucene.NET for its high-speed indexing engine. The following diagram shows the primary components of the RavenDB architecture:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://risal.files.wordpress.com/2016/09/screen-shot-2016-09-06-at-3-53-14-pm.png&#34; alt=&#34;RavenDB architecture&#34; title=&#34;RavenDB architecture&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Storing documents.
-When a document is inserted or updated, RavenDB performs the following:&lt;/p&gt;
+&lt;p&gt;Storing documents.&lt;/p&gt;
+
+&lt;p&gt;When a document is inserted or updated, RavenDB performs the following:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;A document change comes in and is stored in ESENT. Documents are immediately available to load by ID, but won&amp;rsquo;t appear in searches until they are indexed.&lt;/li&gt;
@@ -39,8 +41,9 @@ When a document is inserted or updated, RavenDB performs the following:&lt;/p&gt
 &lt;li&gt;The document now appears in queries. Typically, index updates have an average latency of 20 milliseconds. RavenDB provides an API to wait for updates to be indexed if needed.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;Searching and retrieving documents.
-When a document request comes in, the server is able to pull them directly from the RavenDB database when a document ID is provided. All searches and other inquiries hit the Lucene index. These methods provide near instant access, regardless of the database size.&lt;/p&gt;
+&lt;p&gt;Searching and retrieving documents.&lt;/p&gt;
+
+&lt;p&gt;When a document request comes in, the server is able to pull them directly from the RavenDB database when a document ID is provided. All searches and other inquiries hit the Lucene index. These methods provide near instant access, regardless of the database size.&lt;/p&gt;
 
 &lt;p&gt;A key difference between RavenDB and a relational database is the way index consistency is handled. A relational database ties index updates to data modi cations. The insert, update, or delete only completes once the indexes have been updated. This provides users a consistent view of the data but can quickly degrade when the system is under heavy load.
 RavenDB on the other hand uses a model for indexes known as eventual consistency. Indexes are updated asynchronously from the document storage.&lt;/p&gt;
