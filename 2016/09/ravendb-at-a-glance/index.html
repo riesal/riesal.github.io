@@ -4,7 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <title> Nosql &middot; M. Fahrizal Rahman </title>
+    <title> RavenDB at a Glance &middot; M. Fahrizal Rahman </title>
     
     <link rel="stylesheet" type="text/css" href="https://riesal.github.io/css/uno.min.css" />
     <link rel="stylesheet" type="text/css" href="https://riesal.github.io/css/lightGallery.css" />
@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.ico">
     
-    <link href="https://riesal.github.io/tags/nosql/index.xml" rel="alternate" type="application/rss+xml" title="M. Fahrizal Rahman" />
+    <link href="" rel="alternate" type="application/rss+xml" title="M. Fahrizal Rahman" />
     
     <script src="https://riesal.github.io/js/jquery.min.js"></script>
     <script src="https://riesal.github.io/js/main.min.js">
@@ -27,9 +27,7 @@
     </span>
     <header class="
         
-        
             panel-cover panel-cover--collapsed
-        
         "  style="background-image: url(/images/background-cover.jpg)" >
     <div class="panel-main">
         <div class="panel-main__inner panel-inverted">
@@ -146,22 +144,56 @@
 
         <div class="content-wrapper">
             <div class="content-wrapper__inner">
-                
-                <h2>2016</h2>
-                <ul id="list">
-                    
-                    <li>
-                        <a href="https://riesal.github.io/2016/09/ravendb-at-a-glance-part-2/">RavenDB at a Glance Part 2 </a>
-                        <div class="meta">Mon, Sep 5, 2016</div>
-                    </li>
-                    
-                    <li>
-                        <a href="https://riesal.github.io/2016/09/ravendb-at-a-glance/">RavenDB at a Glance </a>
-                        <div class="meta">Fri, Sep 2, 2016</div>
-                    </li>
-                    
-                </ul>
-                
+                <div class="post">
+                    <h1>RavenDB at a Glance</h1>
+                    <span class="post-date">Fri, Sep 2, 2016</span>
+                    <p><strong>Rethinking the database</strong></p>
+
+<p>When most people talk of a database, they mean a relational database. Relational databases have been the foundation of enterprise application for the past 30 years. First defined in June 1970 by Edgar Codd of IBM&rsquo;s San Jose Research Laboratory, relational databases store data in now familiar tables made up of rows and columns.</p>
+
+<p><span id="more-4512"></span></p>
+
+<p>Relational databases worked well when systems were serving hundreds or even thousands of users, but the Internet has changed all of that. The number of users and volume of data is growing exponentially. A variety of social applications have proved that applications can quickly attract millions of users. Relational databases were never built to handle this level of concurrent access.</p>
+
+<p>Architecture changes.
+While data is still king, how we architect our data-dependent systems has changed signi cantly over the past few decades. In many systems, the database acted as the integration point for different parts of the application. This required the data to be stored in a uniform way since the database was acting as a form of API. The following diagram shows the architectural transitions:</p>
+
+<p><img src="https://risal.files.wordpress.com/2016/09/screen-shot-2016-09-06-at-3-20-54-pm.png" alt="architectural transitions" title="architectural transitions" /></p>
+
+<p>With the move to Service Oriented Architectures (SOA), how data is stored for a given component has become less important. The application interfaces with the service, not the database. The application has a dependency on the service contract, not on the database schema. This shift has opened up the possibilities to store data based on the needs of the service.</p>
+
+<p>RavenDB as Document type database for .NET
+Document databases are made up of semi-structure and schema free data structures known as documents. In this case, the term document is not speaking of a PDF or Word document. Rather, it refers to a rich data structure that can represent related data from the simple to the complex. In document databases, documents are usually represented in JavaScript Object Notation (JSON). A document can contain any number of  elds of any length. Fields can also contain multiple pieces of data. Each document is independent and contains all of the data elements required by the entity.
+The following is an example of a simple document:</p>
+
+<pre><code class="language-javascript">{
+	Name: &quot;Joko Widodo&quot;,
+	BornIn: &quot;Surakarta, Indonesia&quot;,
+	Spouse: &quot;Iriana&quot;
+}
+</code></pre>
+
+<p>And the following is an example of a more complex document:</p>
+
+<pre><code class="language-javascript">{
+	Name: &quot;Joko Widodo&quot;,
+	BornIn: &quot;Surakarta, Indonesia&quot;,
+	YearBorn: &quot;1961&quot;,
+	Children: [
+	{ Name: &quot;Gibran Rakabuming&quot;, YearBorn: &quot;1988&quot; },
+	{ Name: &quot;Kahiyang Ayu&quot;, YearBorn: &quot;1991&quot; },
+	{ Name: &quot;Kaesang Pangarep&quot;, YearBorn: &quot;1994&quot; }
+	]
+}
+</code></pre>
+
+<p>Since documents are JSON-based, the impedance mismatch that exists between the object-oriented and relational database worlds is gone. An object graph is simply serialized into JSON for storage. Now, the complexity of the entity has a small impact on the performance. Entire object graphs can be read and written in one database operation. There is no need to perform a series of select statements or create complex stored procedures to read the related objects.</p>
+
+<p>JSON documents also add exibility due to their schema free design. This allows for evolving systems without forcing the existing data to be restructured. The schema free nature simplifies data structure evolution and customization. However, care must be given to the evolving data structure. If the evolution is a breaking change, documents must be migrated or additional intelligence needs to be built into the application.</p>
+
+<p><a href="/2016/08/idiots-guide-to-ravendb-part-2/">To be continued..</a></p>
+
+                </div>
             </div>
         </div>
     </body>

@@ -4,7 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <title> Nosql &middot; M. Fahrizal Rahman </title>
+    <title> RavenDB at a Glance Part 2 &middot; M. Fahrizal Rahman </title>
     
     <link rel="stylesheet" type="text/css" href="https://riesal.github.io/css/uno.min.css" />
     <link rel="stylesheet" type="text/css" href="https://riesal.github.io/css/lightGallery.css" />
@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.ico">
     
-    <link href="https://riesal.github.io/tags/nosql/index.xml" rel="alternate" type="application/rss+xml" title="M. Fahrizal Rahman" />
+    <link href="" rel="alternate" type="application/rss+xml" title="M. Fahrizal Rahman" />
     
     <script src="https://riesal.github.io/js/jquery.min.js"></script>
     <script src="https://riesal.github.io/js/main.min.js">
@@ -27,9 +27,7 @@
     </span>
     <header class="
         
-        
             panel-cover panel-cover--collapsed
-        
         "  style="background-image: url(/images/background-cover.jpg)" >
     <div class="panel-main">
         <div class="panel-main__inner panel-inverted">
@@ -146,22 +144,51 @@
 
         <div class="content-wrapper">
             <div class="content-wrapper__inner">
-                
-                <h2>2016</h2>
-                <ul id="list">
-                    
-                    <li>
-                        <a href="https://riesal.github.io/2016/09/ravendb-at-a-glance-part-2/">RavenDB at a Glance Part 2 </a>
-                        <div class="meta">Mon, Sep 5, 2016</div>
-                    </li>
-                    
-                    <li>
-                        <a href="https://riesal.github.io/2016/09/ravendb-at-a-glance/">RavenDB at a Glance </a>
-                        <div class="meta">Fri, Sep 2, 2016</div>
-                    </li>
-                    
-                </ul>
-                
+                <div class="post">
+                    <h1>RavenDB at a Glance Part 2</h1>
+                    <span class="post-date">Mon, Sep 5, 2016</span>
+                    <p>RavenDB is built to be a first-class citizen on the .NET platform offering developers the ability to easily extend and embed the database in their applications. A few of the key features that make RavenDB compelling to .NET developers are as follows:</p>
+
+<ol>
+<li>RavenDB comes with a fully functional .NET client API, which implements unit of work, change tracking, read and write optimizations, and much more. It also has a REST-based API, so you can access it via the JavaScript directly.</li>
+<li>It allows developers to de ne indexes using LINQ (Language Integrated Queries). Supports map/reduce operations on top of your documents using LINQ.</li>
+<li>It supports System.Transactions and can take part in distributed transactions.</li>
+<li>The server can be easily extended by adding a custom .NET assembly.</li>
+</ol>
+
+<p>RavenDB architecture.
+RavenDB leverages existing storage infrastructure called ESENT that is known
+to scale to amazing sizes. ESENT is the storage engine utilized by Microsoft Exchange and Active Directory. The storage engine provides the transactional data store for the documents. RavenDB also utilizes another proven technology called Lucene.NET for its high-speed indexing engine. The following diagram shows the primary components of the RavenDB architecture:</p>
+
+<p><img src="https://risal.files.wordpress.com/2016/09/screen-shot-2016-09-06-at-3-53-14-pm.png" alt="RavenDB architecture" title="RavenDB architecture" /></p>
+
+<p>Storing documents.
+When a document is inserted or updated, RavenDB performs the following:</p>
+
+<ol>
+<li>A document change comes in and is stored in ESENT. Documents are immediately available to load by ID, but won&rsquo;t appear in searches until they are indexed.</li>
+<li>Asynchronous indexing task takes work from the queue and updates the Lucene index. The index can be created manually or dynamically based on the queries executed by the application.</li>
+<li>The document now appears in queries. Typically, index updates have an average latency of 20 milliseconds. RavenDB provides an API to wait for updates to be indexed if needed.</li>
+</ol>
+
+<p>Searching and retrieving documents.
+When a document request comes in, the server is able to pull them directly from the RavenDB database when a document ID is provided. All searches and other inquiries hit the Lucene index. These methods provide near instant access, regardless of the database size.</p>
+
+<p>A key difference between RavenDB and a relational database is the way index consistency is handled. A relational database ties index updates to data modi cations. The insert, update, or delete only completes once the indexes have been updated. This provides users a consistent view of the data but can quickly degrade when the system is under heavy load.
+RavenDB on the other hand uses a model for indexes known as eventual consistency. Indexes are updated asynchronously from the document storage.</p>
+
+<p>This means that the visibility of a change within an index is not always available immediately after the document is written. By queuing the indexing operation on a background thread, the system is able to continue servicing reads while the indexing operation catches up. Eventual consistency is a bit counter-intuitive. We do not want the user to view stale data. However, in a multiuser system our users view stale data all the time. Once the data is displayed on the screen, it becomes stale and may have been modi ed by another user.</p>
+
+<p>The following diagram illustrates stale data in a multiuser system:
+<img src="https://risal.files.wordpress.com/2016/09/screen-shot-2016-09-06-at-3-58-13-pm.png" alt="&quot;multiuser system&quot;" title="multiuser system" /></p>
+
+<p>In many cases, this staleness does not matter. Consider a blog post. When you publish a new article, does it really matter if the article becomes visible to the entire world that nanosecond? Will users on the Internet really know if it wasn&rsquo;t? What typically matters is providing feedback to the user who made the change. Either let them know when the change becomes available or pausing brie y while the indexing catches up. If a user did not initiate the data change, then it is even easier.</p>
+
+<p>The change will simply become available when it enters the index. This provides a mechanism to give each user personal consistency. The user making the change can wait for their own changes to take affect while other users don&rsquo;t need to wait.</p>
+
+<p>Eventual consistency is a tradeoff between application responsiveness for all users and consistency between indexes and documents. When used appropriately, this tradeoff becomes a tool for increasing the scalability of a system.</p>
+
+                </div>
             </div>
         </div>
     </body>
