@@ -7,7 +7,108 @@
     <language>en-us</language>
     
     
-    <updated>Thu, 25 Aug 2016 15:06:28 &#43;0000</updated>
+    <updated>Mon, 05 Sep 2016 16:12:28 &#43;0000</updated>
+    
+    <item>
+      <title>Idiot&#39;s Guide to RavenDB Part 2</title>
+      <link>https://riesal.github.io/2016/08/idiots-guide-to-ravendb-part-2/</link>
+      <pubDate>Mon, 05 Sep 2016 16:12:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/08/idiots-guide-to-ravendb-part-2/</guid>
+      <description>&lt;p&gt;RavenDB is built to be a first-class citizen on the .NET platform offering developers the ability to easily extend and embed the database in their applications. A few of the key features that make RavenDB compelling to .NET developers are as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;RavenDB comes with a fully functional .NET client API, which implements unit of work, change tracking, read and write optimizations, and much more. It also has a REST-based API, so you can access it via the JavaScript directly.&lt;/li&gt;
+&lt;li&gt;It allows developers to de ne indexes using LINQ (Language Integrated Queries). Supports map/reduce operations on top of your documents using LINQ.&lt;/li&gt;
+&lt;li&gt;It supports System.Transactions and can take part in distributed transactions.&lt;/li&gt;
+&lt;li&gt;The server can be easily extended by adding a custom .NET assembly.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;RavenDB architecture.
+RavenDB leverages existing storage infrastructure called ESENT that is known
+to scale to amazing sizes. ESENT is the storage engine utilized by Microsoft Exchange and Active Directory. The storage engine provides the transactional data store for the documents. RavenDB also utilizes another proven technology called Lucene.NET for its high-speed indexing engine. The following diagram shows the primary components of the RavenDB architecture:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://risal.files.wordpress.com/2016/09/screen-shot-2016-09-06-at-3-53-14-pm.png&#34; alt=&#34;RavenDB architecture&#34; title=&#34;RavenDB architecture&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Storing documents.
+When a document is inserted or updated, RavenDB performs the following:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;A document change comes in and is stored in ESENT. Documents are immediately available to load by ID, but won&amp;rsquo;t appear in searches until they are indexed.&lt;/li&gt;
+&lt;li&gt;Asynchronous indexing task takes work from the queue and updates the Lucene index. The index can be created manually or dynamically based on the queries executed by the application.&lt;/li&gt;
+&lt;li&gt;The document now appears in queries. Typically, index updates have an average latency of 20 milliseconds. RavenDB provides an API to wait for updates to be indexed if needed.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Searching and retrieving documents.
+When a document request comes in, the server is able to pull them directly from the RavenDB database when a document ID is provided. All searches and other inquiries hit the Lucene index. These methods provide near instant access, regardless of the database size.&lt;/p&gt;
+
+&lt;p&gt;A key difference between RavenDB and a relational database is the way index consistency is handled. A relational database ties index updates to data modi cations. The insert, update, or delete only completes once the indexes have been updated. This provides users a consistent view of the data but can quickly degrade when the system is under heavy load.
+RavenDB on the other hand uses a model for indexes known as eventual consistency. Indexes are updated asynchronously from the document storage.&lt;/p&gt;
+
+&lt;p&gt;This means that the visibility of a change within an index is not always available immediately after the document is written. By queuing the indexing operation on a background thread, the system is able to continue servicing reads while the indexing operation catches up. Eventual consistency is a bit counter-intuitive. We do not want the user to view stale data. However, in a multiuser system our users view stale data all the time. Once the data is displayed on the screen, it becomes stale and may have been modi ed by another user.&lt;/p&gt;
+
+&lt;p&gt;The following diagram illustrates stale data in a multiuser system:
+&lt;img src=&#34;https://risal.files.wordpress.com/2016/09/screen-shot-2016-09-06-at-3-58-13-pm.png&#34; alt=&#34;&amp;quot;multiuser system&amp;quot;&#34; title=&#34;multiuser system&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In many cases, this staleness does not matter. Consider a blog post. When you publish a new article, does it really matter if the article becomes visible to the entire world that nanosecond? Will users on the Internet really know if it wasn&amp;rsquo;t? What typically matters is providing feedback to the user who made the change. Either let them know when the change becomes available or pausing brie y while the indexing catches up. If a user did not initiate the data change, then it is even easier.&lt;/p&gt;
+
+&lt;p&gt;The change will simply become available when it enters the index. This provides a mechanism to give each user personal consistency. The user making the change can wait for their own changes to take affect while other users don&amp;rsquo;t need to wait.&lt;/p&gt;
+
+&lt;p&gt;Eventual consistency is a tradeoff between application responsiveness for all users and consistency between indexes and documents. When used appropriately, this tradeoff becomes a tool for increasing the scalability of a system.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Idiot&#39;s Guide to RavenDB Part 1</title>
+      <link>https://riesal.github.io/2016/08/idiots-guide-to-ravendb-part-1/</link>
+      <pubDate>Fri, 02 Sep 2016 15:12:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/08/idiots-guide-to-ravendb-part-1/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Rethinking the database&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;When most people talk of a database, they mean a relational database. Relational databases have been the foundation of enterprise application for the past 30 years. First de ned in June 1970 by Edgar Codd of IBM&amp;rsquo;s San Jose Research Laboratory, relational databases store data in now familiar tables made up of rows and columns.&lt;/p&gt;
+
+&lt;p&gt;&lt;span id=&#34;more-4512&#34;&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;Relational databases worked well when systems were serving hundreds or even thousands of users, but the Internet has changed all of that. The number of users and volume of data is growing exponentially. A variety of social applications have proved that applications can quickly attract millions of users. Relational databases were never built to handle this level of concurrent access.&lt;/p&gt;
+
+&lt;p&gt;Architecture changes.
+While data is still king, how we architect our data-dependent systems has changed signi cantly over the past few decades. In many systems, the database acted as the integration point for different parts of the application. This required the data to be stored in a uniform way since the database was acting as a form of API. The following diagram shows the architectural transitions:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://risal.files.wordpress.com/2016/09/screen-shot-2016-09-06-at-3-20-54-pm.png&#34; alt=&#34;architectural transitions&#34; title=&#34;architectural transitions&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;With the move to Service Oriented Architectures (SOA), how data is stored for a given component has become less important. The application interfaces with the service, not the database. The application has a dependency on the service contract, not on the database schema. This shift has opened up the possibilities to store data based on the needs of the service.&lt;/p&gt;
+
+&lt;p&gt;RavenDB as Document type database for .NET
+Document databases are made up of semi-structure and schema free data structures known as documents. In this case, the term document is not speaking of a PDF or Word document. Rather, it refers to a rich data structure that can represent related data from the simple to the complex. In document databases, documents are usually represented in JavaScript Object Notation (JSON). A document can contain any number of  elds of any length. Fields can also contain multiple pieces of data. Each document is independent and contains all of the data elements required by the entity.
+The following is an example of a simple document:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+	Name: &amp;quot;Alexander Graham Bell&amp;quot;,
+	BornIn: &amp;quot;Edinburgh, United Kingdom&amp;quot;,
+	Spouse: &amp;quot;Mabel Gardiner Hubbard&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the following is an example of a more complex document:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+	Name: &amp;quot;Galileo Galilei&amp;quot;,
+	BornIn: &amp;quot;Pisa, Italy&amp;quot;,
+	YearBorn: &amp;quot;1564&amp;quot;,
+	Children: [
+	{ Name: &amp;quot;Virginia&amp;quot;, YearBorn: &amp;quot;1600&amp;quot; },
+	{ Name: &amp;quot;Vincenzo&amp;quot;, YearBorn: &amp;quot;1606&amp;quot; }
+]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since documents are JSON-based, the impedance mismatch that exists between the object-oriented and relational database worlds is gone. An object graph is simply serialized into JSON for storage. Now, the complexity of the entity has a small impact on the performance. Entire object graphs can be read and written in one database operation. There is no need to perform a series of select statements or create complex stored procedures to read the related objects.&lt;/p&gt;
+
+&lt;p&gt;JSON documents also add exibility due to their schema free design. This allows for evolving systems without forcing the existing data to be restructured. The schema free nature simplifies data structure evolution and customization. However, care must be given to the evolving data structure. If the evolution is a breaking change, documents must be migrated or additional intelligence needs to be built into the application.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://riesal.github.io/2016/08/idiots-guide-to-ravendb-part-2/&#34;&gt;To be continued..&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>kgraft to Patch Ubuntu Kernel without Reboot</title>
@@ -1270,76 +1371,6 @@ Instance metadata is data about your instance that you can use to configure or m
 
 &lt;p&gt;&lt;/div&gt;
 &lt;/div&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>RIP DAVID BOWIE</title>
-      <link>https://riesal.github.io/2016/01/rip-david-bowie/</link>
-      <pubDate>Wed, 13 Jan 2016 10:14:18 &#43;0000</pubDate>
-      
-      <guid>https://riesal.github.io/2016/01/rip-david-bowie/</guid>
-      <description>&lt;p&gt;&lt;em&gt;“And the internet now carries the flag of being subversive and possibly rebellious, and chaotic and nihilistic….I think the potential of what the Internet is going to do to society both good and bad is unimaginable. I think we’re on the cusp of something exhilarating and terrifying.”&lt;/em&gt; – David Bowie, 2000&lt;/p&gt;
-
-&lt;p&gt;RIP DAVID BOWIE, To say that David Bowie was a pioneer was an understatement.  Not only did he redefine music and culture in a way never seen before or since — he even defined how technology was being used to spread culture.&lt;/p&gt;
-
-&lt;p&gt;We all know the gender-bending costumes and far out stories he told in his songs, but did you know that &lt;a href=&#34;http://www.theguardian.com/technology/2016/jan/11/david-bowie-bowienet-isp-internet&#34;&gt;David Bowie was an internet mogul too&lt;/a&gt;?  He was the first major artist to do an online-only distribution of a song back in 1996. Before sending tweets or liking a YouTube video, you could join BowieNet, which would allow you to chat with the artist, share links, and even launch your own web page.&lt;/p&gt;
-
-&lt;p&gt;David Bowie understood that the internet was not just bits and bytes, but a communication channel that connected people in ways never seen in history. He saw how disruptive it was to cultures around the world. Only years later would we all see Bowie’s vision unfold to shape not only music, but all future human interaction.&lt;/p&gt;
-
-&lt;p&gt;RIP DAVID BOWIE, Thank you for your vision and inspiration to us all.&lt;/p&gt;
-
-&lt;p&gt;Watch this &lt;a href=&#34;https://www.facebook.com/FACTmagazine/videos/10153819928364687/&#34;&gt;interview of David Bowie&lt;/a&gt; discussing the power of the internet back in 2000.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Things to do before buying a domain</title>
-      <link>https://riesal.github.io/2015/12/things-buying-domain/</link>
-      <pubDate>Tue, 29 Dec 2015 07:09:19 &#43;0000</pubDate>
-      
-      <guid>https://riesal.github.io/2015/12/things-buying-domain/</guid>
-      <description>&lt;div class=&#34;postcontents&#34;&gt;
-  &lt;p&gt;
-    Domains are relatively easy to purchase: You just head over to &lt;a href=&#34;http://intispace.com&#34; target=&#34;_blank&#34;&gt;your favorite registrar&lt;/a&gt;, type in the domain you’re interested in, and as long as it’s available, it can be yours with a few clicks of a button. But the real work comes &lt;em&gt;before&lt;/em&gt; you make your purchase..
-  &lt;/p&gt;
-  
-  &lt;p&gt;
-    If you want to register a great domain name that will set you up for success in the long run, perform these things to do before buying a domain before hitting the “&lt;span style=&#34;text-decoration: underline;&#34;&gt;Purchase&lt;/span&gt;” button.
-  &lt;/p&gt;
-  
-  &lt;h2&gt;
-    Give yourself time to really think about your domain name before committing to one
-  &lt;/h2&gt;
-  
-  &lt;p&gt;
-    Things to do before buying a domain. Your first idea for a domain name may not be your best one. Give yourself time to think over possibilities and come up with several options to choose from. After all, a great domain name is the foundation of a good website. It should be memorable, easy to type, and effectively share your brand. Also, think beyond traditional domain endings and consider using a New Domain. Not only does it offer you the chance to create a uniquely branded URL, but it also has a lot more availability than traditional domain names.
-  &lt;/p&gt;
-  
-  &lt;h2&gt;
-    Determine how you’ll be using your domain
-  &lt;/h2&gt;
-  
-  &lt;p&gt;
-    Things to do before buying a domain. You have several options for how to use your domain once it’s registered. The most obvious way to use it is as the primary URL for a new website—but that’s not your only option. You can maximize your online presence by pointing your domain to a variety of other places. Highlight a specific section of your website through a customized domain (for example, showcase your philanthropy efforts with a yoursite.gives domain), or make it easy for new followers to find you on social media with a yoursite.social domain name.
-  &lt;/p&gt;
-  
-  &lt;h2&gt;
-    Make sure you’re not infringing on someone else’s trademark
-  &lt;/h2&gt;
-  
-  &lt;p&gt;
-    Things to do before buying a domain. There’s always a possibility that the brilliant, perfect, one-of-a-kind domain name you’ve come up with isn’t as unique as you thought. If it turns out that your domain is the same or very similar to trademarked content, you could be in big trouble down the road. It’s worth the extra effort to do your research ahead of time to make sure you aren’t infringing upon someone else’s intellectual property. A quick Google search is a good place to start, but you can also use the &lt;a href=&#34;http://www.uspto.gov/&#34; target=&#34;_blank&#34;&gt;U.S. Patent and Trademark Office website&lt;/a&gt; to do more in-depth research. Nolo.com also offers a comprehensive guide for &lt;a href=&#34;http://www.nolo.com/legal-encyclopedia/avoid-trademark-infringement-domain-name-29032.html&#34; target=&#34;_blank&#34;&gt;understanding if your domain name infringes on a trademark&lt;/a&gt;.
-  &lt;/p&gt;
-  
-  &lt;h2&gt;
-    See if social handles of the same (or a similar) name are available
-  &lt;/h2&gt;
-  
-  &lt;p&gt;
-    Social media is now an essential part of curating an online presence. You want it to be as easy as possible for your website visitors to find and follow you on other social networks. Having a consistent handle across your website and social media accounts streamlines your online presence and is a great way to brand yourself. With the right tools, it doesn’t take a lot of work to determine if a name is available across the board. &lt;a href=&#34;http://www.name.com/blog/business/social-media-2/2015/09/rembrandt-social-media-branding-made-easy/&#34; target=&#34;_blank&#34;&gt;Download the Chrome extension Rembrandt&lt;/a&gt; and whenever you search for a domain name on intispace.com, you’ll automatically see if the same handles are available on Facebook, Twitter, Instagram, and Pinterest.
-  &lt;/p&gt;
-&lt;/div&gt;
 </description>
     </item>
     

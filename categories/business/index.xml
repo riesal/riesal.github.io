@@ -7,7 +7,108 @@
     <language>en-us</language>
     
     
-    <updated>Thu, 25 Aug 2016 15:06:28 &#43;0000</updated>
+    <updated>Mon, 05 Sep 2016 16:12:28 &#43;0000</updated>
+    
+    <item>
+      <title>Idiot&#39;s Guide to RavenDB Part 2</title>
+      <link>https://riesal.github.io/2016/08/idiots-guide-to-ravendb-part-2/</link>
+      <pubDate>Mon, 05 Sep 2016 16:12:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/08/idiots-guide-to-ravendb-part-2/</guid>
+      <description>&lt;p&gt;RavenDB is built to be a first-class citizen on the .NET platform offering developers the ability to easily extend and embed the database in their applications. A few of the key features that make RavenDB compelling to .NET developers are as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;RavenDB comes with a fully functional .NET client API, which implements unit of work, change tracking, read and write optimizations, and much more. It also has a REST-based API, so you can access it via the JavaScript directly.&lt;/li&gt;
+&lt;li&gt;It allows developers to de ne indexes using LINQ (Language Integrated Queries). Supports map/reduce operations on top of your documents using LINQ.&lt;/li&gt;
+&lt;li&gt;It supports System.Transactions and can take part in distributed transactions.&lt;/li&gt;
+&lt;li&gt;The server can be easily extended by adding a custom .NET assembly.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;RavenDB architecture.
+RavenDB leverages existing storage infrastructure called ESENT that is known
+to scale to amazing sizes. ESENT is the storage engine utilized by Microsoft Exchange and Active Directory. The storage engine provides the transactional data store for the documents. RavenDB also utilizes another proven technology called Lucene.NET for its high-speed indexing engine. The following diagram shows the primary components of the RavenDB architecture:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://risal.files.wordpress.com/2016/09/screen-shot-2016-09-06-at-3-53-14-pm.png&#34; alt=&#34;RavenDB architecture&#34; title=&#34;RavenDB architecture&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Storing documents.
+When a document is inserted or updated, RavenDB performs the following:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;A document change comes in and is stored in ESENT. Documents are immediately available to load by ID, but won&amp;rsquo;t appear in searches until they are indexed.&lt;/li&gt;
+&lt;li&gt;Asynchronous indexing task takes work from the queue and updates the Lucene index. The index can be created manually or dynamically based on the queries executed by the application.&lt;/li&gt;
+&lt;li&gt;The document now appears in queries. Typically, index updates have an average latency of 20 milliseconds. RavenDB provides an API to wait for updates to be indexed if needed.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Searching and retrieving documents.
+When a document request comes in, the server is able to pull them directly from the RavenDB database when a document ID is provided. All searches and other inquiries hit the Lucene index. These methods provide near instant access, regardless of the database size.&lt;/p&gt;
+
+&lt;p&gt;A key difference between RavenDB and a relational database is the way index consistency is handled. A relational database ties index updates to data modi cations. The insert, update, or delete only completes once the indexes have been updated. This provides users a consistent view of the data but can quickly degrade when the system is under heavy load.
+RavenDB on the other hand uses a model for indexes known as eventual consistency. Indexes are updated asynchronously from the document storage.&lt;/p&gt;
+
+&lt;p&gt;This means that the visibility of a change within an index is not always available immediately after the document is written. By queuing the indexing operation on a background thread, the system is able to continue servicing reads while the indexing operation catches up. Eventual consistency is a bit counter-intuitive. We do not want the user to view stale data. However, in a multiuser system our users view stale data all the time. Once the data is displayed on the screen, it becomes stale and may have been modi ed by another user.&lt;/p&gt;
+
+&lt;p&gt;The following diagram illustrates stale data in a multiuser system:
+&lt;img src=&#34;https://risal.files.wordpress.com/2016/09/screen-shot-2016-09-06-at-3-58-13-pm.png&#34; alt=&#34;&amp;quot;multiuser system&amp;quot;&#34; title=&#34;multiuser system&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In many cases, this staleness does not matter. Consider a blog post. When you publish a new article, does it really matter if the article becomes visible to the entire world that nanosecond? Will users on the Internet really know if it wasn&amp;rsquo;t? What typically matters is providing feedback to the user who made the change. Either let them know when the change becomes available or pausing brie y while the indexing catches up. If a user did not initiate the data change, then it is even easier.&lt;/p&gt;
+
+&lt;p&gt;The change will simply become available when it enters the index. This provides a mechanism to give each user personal consistency. The user making the change can wait for their own changes to take affect while other users don&amp;rsquo;t need to wait.&lt;/p&gt;
+
+&lt;p&gt;Eventual consistency is a tradeoff between application responsiveness for all users and consistency between indexes and documents. When used appropriately, this tradeoff becomes a tool for increasing the scalability of a system.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Idiot&#39;s Guide to RavenDB Part 1</title>
+      <link>https://riesal.github.io/2016/08/idiots-guide-to-ravendb-part-1/</link>
+      <pubDate>Fri, 02 Sep 2016 15:12:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/08/idiots-guide-to-ravendb-part-1/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Rethinking the database&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;When most people talk of a database, they mean a relational database. Relational databases have been the foundation of enterprise application for the past 30 years. First de ned in June 1970 by Edgar Codd of IBM&amp;rsquo;s San Jose Research Laboratory, relational databases store data in now familiar tables made up of rows and columns.&lt;/p&gt;
+
+&lt;p&gt;&lt;span id=&#34;more-4512&#34;&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;Relational databases worked well when systems were serving hundreds or even thousands of users, but the Internet has changed all of that. The number of users and volume of data is growing exponentially. A variety of social applications have proved that applications can quickly attract millions of users. Relational databases were never built to handle this level of concurrent access.&lt;/p&gt;
+
+&lt;p&gt;Architecture changes.
+While data is still king, how we architect our data-dependent systems has changed signi cantly over the past few decades. In many systems, the database acted as the integration point for different parts of the application. This required the data to be stored in a uniform way since the database was acting as a form of API. The following diagram shows the architectural transitions:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://risal.files.wordpress.com/2016/09/screen-shot-2016-09-06-at-3-20-54-pm.png&#34; alt=&#34;architectural transitions&#34; title=&#34;architectural transitions&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;With the move to Service Oriented Architectures (SOA), how data is stored for a given component has become less important. The application interfaces with the service, not the database. The application has a dependency on the service contract, not on the database schema. This shift has opened up the possibilities to store data based on the needs of the service.&lt;/p&gt;
+
+&lt;p&gt;RavenDB as Document type database for .NET
+Document databases are made up of semi-structure and schema free data structures known as documents. In this case, the term document is not speaking of a PDF or Word document. Rather, it refers to a rich data structure that can represent related data from the simple to the complex. In document databases, documents are usually represented in JavaScript Object Notation (JSON). A document can contain any number of  elds of any length. Fields can also contain multiple pieces of data. Each document is independent and contains all of the data elements required by the entity.
+The following is an example of a simple document:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+	Name: &amp;quot;Alexander Graham Bell&amp;quot;,
+	BornIn: &amp;quot;Edinburgh, United Kingdom&amp;quot;,
+	Spouse: &amp;quot;Mabel Gardiner Hubbard&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the following is an example of a more complex document:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
+	Name: &amp;quot;Galileo Galilei&amp;quot;,
+	BornIn: &amp;quot;Pisa, Italy&amp;quot;,
+	YearBorn: &amp;quot;1564&amp;quot;,
+	Children: [
+	{ Name: &amp;quot;Virginia&amp;quot;, YearBorn: &amp;quot;1600&amp;quot; },
+	{ Name: &amp;quot;Vincenzo&amp;quot;, YearBorn: &amp;quot;1606&amp;quot; }
+]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since documents are JSON-based, the impedance mismatch that exists between the object-oriented and relational database worlds is gone. An object graph is simply serialized into JSON for storage. Now, the complexity of the entity has a small impact on the performance. Entire object graphs can be read and written in one database operation. There is no need to perform a series of select statements or create complex stored procedures to read the related objects.&lt;/p&gt;
+
+&lt;p&gt;JSON documents also add exibility due to their schema free design. This allows for evolving systems without forcing the existing data to be restructured. The schema free nature simplifies data structure evolution and customization. However, care must be given to the evolving data structure. If the evolution is a breaking change, documents must be migrated or additional intelligence needs to be built into the application.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://riesal.github.io/2016/08/idiots-guide-to-ravendb-part-2/&#34;&gt;To be continued..&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>kgraft to Patch Ubuntu Kernel without Reboot</title>
@@ -850,179 +951,6 @@ Instance metadata is data about your instance that you can use to configure or m
 &lt;p&gt;Moving hosting sucks, make sure your movers are professionals. When people move from an old host to Intispace, we know the process can be stressful. No one wants to escape a bad host only to find their website doesn’t work properly on the new one. That’s why we train our expert staff to move people safely and effectively.&lt;/p&gt;
 
 &lt;p&gt;Whether it’s your home, your business, or your website, moving sucks. Working with trusted professionals like Intispace lets you relax while they take care of all the heavy lifting.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Maximize Your Marketing Potential</title>
-      <link>https://riesal.github.io/2015/05/maximize-your-marketing-potential/</link>
-      <pubDate>Fri, 29 May 2015 12:15:42 &#43;0000</pubDate>
-      
-      <guid>https://riesal.github.io/2015/05/maximize-your-marketing-potential/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;Is it worth it for a marketer to become technical, creative and analytical? Read why dedicating time to expanding your skillset will only improve your overall success.&lt;/strong&gt;&lt;span id=&#34;more-1625&#34;&gt;&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;Marketing is a broad field. It is not just about search engine optimization, it isn’t just expanding reach on social media and it definitely isn’t just advertising. Marketing pulls several different components together to form a profitable business.&lt;/p&gt;
-
-&lt;p&gt;Maximize Your Marketing Potential! One of the most important aspects of a well-rounded marketer that is commonly overlooked is having the necessary technical skills. A marketer might ask: why should I learn how to code if I can hire a developer? Or why should I spend time developing my writing skills if I can hire a copywriter?&lt;/p&gt;
-
-&lt;p&gt;There are several reasons why it pays to expand your skillset, the first being that you may not be in a position to be hiring other people to work for you. In fact, you may very well be the one &lt;em&gt;being&lt;/em&gt; hired. When it comes to this, having a wide range of skills will set you apart from the rest.&lt;/p&gt;
-
-&lt;p&gt;Here are 7 skills that every marketer (or hopeful entrepreneur) should aim to develop:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Web technology and development (HTML, CSS, JavaScript)&lt;/strong&gt; – Having a strong grasp on these basic coding languages will benefit you greatly and help you create a strong web presence. Even if you go the route of using a Content Management Software (CMS), you’ll still need to understand how HTML and CSS work. Your website, or the sites you help clients create, will never be up to par if you don’t have a confident base in web development.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Web design/UX design&lt;/strong&gt; – Although similar to web development, web design and UX design focus on how your audience will interact with a website or web app. Knowing what kind of typography works best or the ideal location of a CTA (Call To Action) can drastically improve how a user browses a webpage. Start by learning how to make sitemaps and wireframes and then deepen your design skills from there.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Learn new software&lt;/strong&gt; – This may depend on the type of work you’ll be doing, but we suggest starting with the Adobe Creative Cloud (Photoshop, InDesign, Illustrator). Everything from hopeful startups to Fortune 500 companies use programs like Photoshop. In addition to this, become an expert with Excel; this dramatically helps with the following tip.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Analytics&lt;/strong&gt; – Evaluating results and testing what is and isn’t working is crucial for a marketer. If something isn’t working you’re more likely to know about it if you have the data as evidence. From this data you can figure out what changes are needed to improve it. And of course if something is working well, the proof is in the data. I had a marketing professor that always said, “In God we trust. All others bring data”.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;SEO&lt;/strong&gt; – Search Engine Optimization is a key role for all marketers. In today’s digital age your targeted audience must be able to find you online. How much will your revenue increase if a potential customer finds your site at the top of their Google search? Yeah, SEO is &lt;em&gt;that&lt;/em&gt; important.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Copywriting&lt;/strong&gt; – We can all agree that not everyone writes well. However, writing is a skill that can be developed and as with any other kind of skill, practice makes perfect. Don’t be afraid to express your creativity in the copy that you write. This is one of the major opportunities you have to reach out and connect with your audience.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Databases/SQL&lt;/strong&gt; – Understanding databases can help you pull the data you need to analyze and put it to use. Being able to at least process SQL will give you the ability to look through a database. When you feel more comfortable with it you can even create your own.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Social media&lt;/strong&gt; – Ten years ago, no one would have taken a marketer who focused only on social media seriously. Now, it’s essential for all marketers to understand how to build a strong social presence. Effectively using Facebook, Twitter, Instagram and Google+ can boost your business from an unknown startup to the next Pebble smartwatch.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Web hosting&lt;/strong&gt; – As a marketer you may be responsible for getting a site live and making sure it functions properly. You might not be involved with profound server-side protocols, but you should at least understand the basics of hosting, including FTP (File Transfer Protocol) and SSL (Secure Sockets Layer).&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Branding&lt;/strong&gt; – Let’s not forget one of the staple attributes of a good marketer: the ability to brand a product or service. This seems simple to some, but large corporations pay top marketers hundreds of thousands of dollars to build their brand. What makes companies like Apple or Nike or North Face so elite? It boils down to the image that they’ve created for themselves through outstanding marketing.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;You of course can’t learn all of these skills in only a couple of weeks. It may take years to finally grasp new and foreign concepts such as SEO and JavaScript. However, dedicating the time to learn will only make you a better marketer.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;To market your business online you need to start by registering a domain name and host a site. See how &lt;a href=&#34;http://intispace.com&#34;&gt;Intispace Netmedia&lt;/a&gt; can help you start your online business.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Keep checking the intispace blog for more upcoming tips on starting your own business. Also, send us a tweet &lt;a href=&#34;http://twitter.com/intispace&#34;&gt;@intispace&lt;/a&gt; with your own ideas on what makes a great domain name!&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;This article was brought to you by Intispace Netmedia, for scalable wordpress hosting visit our site here www.intispace.com&lt;/strong&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Image Optimization, An Easy Win For A Faster Site</title>
-      <link>https://riesal.github.io/2015/05/image-optimization-an-easy-win-for-a-faster-site/</link>
-      <pubDate>Mon, 25 May 2015 00:05:27 &#43;0000</pubDate>
-      
-      <guid>https://riesal.github.io/2015/05/image-optimization-an-easy-win-for-a-faster-site/</guid>
-      <description>
-
-&lt;p&gt;Website speed optimization can be a complex and technical practice, but the non-techies out there will be happy to learn that one of the biggest problems is actually easy for the layperson to solve.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-problem-with-images&#34;&gt;The Problem With Images&lt;/h2&gt;
-
-&lt;p&gt;Image Optimization, An Easy Win For A Faster Site. Images are typically the one of the biggest drains on page load time. Even with caching and a CDN, an unoptimized image will still drag down your page loading time. But, as the website owner, images are completely under your control, so if you can get a handle on how to work with and optimize images, you can have a great impact on the speed of your site.&lt;/p&gt;
-
-&lt;p&gt;Based on the websites that I look at during my Intispace customer support duties, I see that images contribute, on average, about 30% of the total page load time. Often this is the single largest factor of the loading time. In extreme cases, it could be closer to 60% of the loading time.&lt;/p&gt;
-
-&lt;p&gt;Here’s an example of what un-optimized images will do to your site:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;img class=&#34;aligncenter size-full wp-image-431  lazyautosizes lazyloaded&#34; src=&#34;http://cdn.wp-rocket.me/wp-content/uploads/4/pingdom-image-slow-site.jpg&#34; alt=&#34;Large Images slow down your website&#34; width=&#34;500&#34; height=&#34;108&#34; data-lazy-src=&#34;http://cdn.wp-rocket.me/wp-content/uploads/4/pingdom-image-slow-site.jpg&#34; /&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The load time is 12 seconds and the size of the page is 8MB. Of those 8MB, images account for 6.7MB. This is out of control!&lt;/p&gt;
-
-&lt;p&gt;The number of http requests is commonly cited as a factor in load time, and while it is important, ultimately it’s the page size that is the real indicator of speed or slowness. You can have a small number of http requests, but if those requests are summoning giant images, you will have a problem on your hands.&lt;/p&gt;
-
-&lt;h3 id=&#34;understanding-dimensions-and-file-size&#34;&gt;Understanding Dimensions and File Size&lt;/h3&gt;
-
-&lt;p&gt;The dimensions of the image, i.e. how much space on the screen an image takes up, are measured in pixels and while they do not 100% dictate file size, they are related. The larger the dimensions of your image, the larger the file size.&lt;/p&gt;
-
-&lt;p&gt;File size is measured in kilobytes (KB) and megabytes (MB)&lt;/p&gt;
-
-&lt;p&gt;1MB = 1000KB&lt;/p&gt;
-
-&lt;p&gt;To give you a point of reference, the main content column of this blog is 796 pixels wide.&lt;/p&gt;
-
-&lt;p&gt;If you take a photo with your smartphone, depending on your settings, that photo could be in the region of 2500 pixels wide (or even more) with a filesize of 3MB (or 3000KB). If I were to take a photo with my phone and upload it to this blog without any editing, I’m going to be uploading a file that is about 3 times as big as it needs to be – a total waste of resources and a drag on page load.&lt;/p&gt;
-
-&lt;p&gt;So while snapping phone pics and uploading to your blog might be simple, it creates a real problem if you want a fast site,  by adding tons of unnecessary weight.&lt;/p&gt;
-
-&lt;h3 id=&#34;resizing-images&#34;&gt;Resizing Images&lt;/h3&gt;
-
-&lt;p&gt;So the first thing you need to do is resize your images to the correct size for your site. For blog images, figure out how wide your blog’s content area is  and never upload an image wider than that. If it’s going to be used in a slider, make sure you determine the dimensions of the slider first.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;How do you know how wide your content area is?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;If you know how to use the developer tools built in to Chrome or Firefox, you can use that. But if that sounds scary there are simpler tools available.&lt;/p&gt;
-
-&lt;p&gt;If you’re on a Mac, there is a screen capture tool, Grab, already built-in, and when you outline an area on the screen it will tell you the pixels. &lt;a href=&#34;https://www.aeyoun.com/posts/osx-screen-shot-ruler.html&#34; target=&#34;_blank&#34;&gt;This article explains in more detail.&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Or you can  &lt;a href=&#34;https://chrome.google.com/webstore/detail/page-ruler/jlpkojjdgbllmedoapgfodplfhcbnbpn/related?hl=en&#34; target=&#34;_blank&#34;&gt;install the easy Page Ruler addon  for Chrome&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Once you’ve figured out what dimensions your images should be, you can use any of the below tools to resize your images accordingly:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Resizing Applications&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Photoshop&lt;/li&gt;
-&lt;li&gt;GIMP – free, Windows &amp;amp; Mac&lt;/li&gt;
-&lt;li&gt;Irfan View- free for Windows&lt;/li&gt;
-&lt;li&gt;Preview for Mac – it’s already installed!&lt;/li&gt;
-&lt;li&gt;Developers on Macs can &lt;a href=&#34;https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/sips.1.html&#34; target=&#34;_blank&#34;&gt;check out sips, a command line tool&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Online Tools For Resizing&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Picmonkey.com&lt;/li&gt;
-&lt;li&gt;Pixlr.com (also has mobile app)&lt;/li&gt;
-&lt;li&gt;Fotor.com (also has mobile app)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;It doesn’t matter which one you use – all you need to do is locate the resize feature. You’ll be able to enter the desired pixel width and the application will make sure the image stays in proportion by adjusting the height automatically.&lt;/p&gt;
-
-&lt;h4 id=&#34;image-formats&#34;&gt;Image Formats&lt;/h4&gt;
-
-&lt;p&gt;Images on the web should be saved in either .jpg, .png, or possibly .gif&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;JPEGs&lt;/strong&gt; are best used for photographs and general purpose images where you do not need any transparency. You can compress them easily and get a smaller filesize suitable for the web.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;PNGs&lt;/strong&gt; will often generate a larger filesize so should only be used when you have an image that requires transparency.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;GIFs&lt;/strong&gt; are less frequently used. They have a limited range of color so can only be used for very simple images, but can produce a small filesize.&lt;/p&gt;
-
-&lt;h3 id=&#34;compressing-images&#34;&gt;Compressing Images&lt;/h3&gt;
-
-&lt;p&gt;So we’ve dealt with the physical dimensions of the image, now let’s deal with the ‘weight’ of the image. We want to compress the image to make it as lean and fast-loading as possible. &lt;strong&gt;The goal is to reduce the filesize&lt;/strong&gt;. There isn’t a magic number as to what each image should be, since it depends on how the image will be used. Images being used in a hero banner or slider will be bigger, but if you have a few of them, I’d aim to get each one down to 100KB or less.&lt;/p&gt;
-
-&lt;p&gt;Small images that are going to be used for thumbnails, logos etc will be much much smaller. The logo at the top of this blog, for example, is 3.8KB.&lt;/p&gt;
-
-&lt;p&gt;With compression there may be a slight loss in quality, so you’re looking for a balance between quality and file size. But always remember that the smaller the filesize, the faster the load time will be.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Applications&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Photoshop – make sure to use the &lt;em&gt;Save For Web&lt;/em&gt; option&lt;/li&gt;
-&lt;li&gt;GIMP&lt;/li&gt;
-&lt;li&gt;ImageOptim (Mac)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Online Tools&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Compressor.io – make sure to choose the ‘lossy’ option for the biggest size reduction.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;wordpress-plugins&#34;&gt;WordPress Plugins&lt;/h3&gt;
-
-&lt;p&gt;It’s preferable to resize and compress your image before you upload it to WordPress.&lt;/p&gt;
-
-&lt;p&gt;However, if your site is already live, you will need to deal with the images that are already there.&lt;/p&gt;
-
-&lt;p&gt;For the crucial images such as logos, headers and others that load on every page of your site, it would be best to make new versions of the images as described above, then install the &lt;strong&gt;&lt;a href=&#34;https://wordpress.org/plugins/enable-media-replace/&#34; target=&#34;_blank&#34;&gt;Enable Media Replace plugin&lt;/a&gt;&lt;/strong&gt;. This will allow you to simply replace existing images in your media library with the new, optimized ones, without breaking any links.&lt;/p&gt;
-
-&lt;p&gt;For the other images sitting in your media library, where it would be unrealistic to go through and fix them all individually,there are a few handy plugins that will help you.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://wordpress.org/plugins/ewww-image-optimizer/&#34; target=&#34;_blank&#34;&gt;EWWW Image Optimizer&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This plugin can go through your existing media library and compress everything in bulk.&lt;/p&gt;
-
-&lt;p&gt;If you build sites for clients or have a site with multiple users where you cannot ensure that everyone is using best practices and uploading nicely optimized images, the below plugins will help mitigate that.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://wordpress.org/plugins/imsanity/&#34; target=&#34;_blank&#34;&gt;Imsanity&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;You can determine the settings so that if someone uploads a gigantic image, it will automatically be reduced to maximum size of your choosing. No more 4000 pixel images clogging up the media library!&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://wordpress.org/plugins/tiny-compress-images/&#34; target=&#34;_blank&#34;&gt;Compress JPEG &amp;amp; PNG Images&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Once set up, this uses the TinyPNG API to automatically compress images on upload. You can get a free API key for up to 500 images/month which would be plenty for the average blogger.&lt;/p&gt;
-
-&lt;p&gt;If you need to benchmark the speed of your site, or do before/after comparisons with images after optimizing, &lt;a title=&#34;How To Correctly Measure Your Website’s Page Load Time&#34; href=&#34;http://blog.intispace.com/?p=33279&#34; target=&#34;_blank&#34;&gt;follow this guide on how to properly measure the load time of your site&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
