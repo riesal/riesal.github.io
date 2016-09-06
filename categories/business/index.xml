@@ -66,7 +66,7 @@ RavenDB on the other hand uses a model for indexes known as eventual consistency
       <guid>https://riesal.github.io/2016/08/idiots-guide-to-ravendb-part-1/</guid>
       <description>&lt;p&gt;&lt;strong&gt;Rethinking the database&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;When most people talk of a database, they mean a relational database. Relational databases have been the foundation of enterprise application for the past 30 years. First de ned in June 1970 by Edgar Codd of IBM&amp;rsquo;s San Jose Research Laboratory, relational databases store data in now familiar tables made up of rows and columns.&lt;/p&gt;
+&lt;p&gt;When most people talk of a database, they mean a relational database. Relational databases have been the foundation of enterprise application for the past 30 years. First defined in June 1970 by Edgar Codd of IBM&amp;rsquo;s San Jose Research Laboratory, relational databases store data in now familiar tables made up of rows and columns.&lt;/p&gt;
 
 &lt;p&gt;&lt;span id=&#34;more-4512&#34;&gt;&lt;/span&gt;&lt;/p&gt;
 
@@ -84,22 +84,24 @@ Document databases are made up of semi-structure and schema free data structures
 The following is an example of a simple document:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
-	Name: &amp;quot;Alexander Graham Bell&amp;quot;,
-	BornIn: &amp;quot;Edinburgh, United Kingdom&amp;quot;,
-	Spouse: &amp;quot;Mabel Gardiner Hubbard&amp;quot;
+	Name: &amp;quot;Joko Widodo&amp;quot;,
+	BornIn: &amp;quot;Surakarta, Indonesia&amp;quot;,
+	Spouse: &amp;quot;Iriana&amp;quot;
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;And the following is an example of a more complex document:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;{
-	Name: &amp;quot;Galileo Galilei&amp;quot;,
-	BornIn: &amp;quot;Pisa, Italy&amp;quot;,
-	YearBorn: &amp;quot;1564&amp;quot;,
+	Name: &amp;quot;Joko Widodo&amp;quot;,
+	BornIn: &amp;quot;Surakarta, Indonesia&amp;quot;,
+	YearBorn: &amp;quot;1961&amp;quot;,
 	Children: [
-	{ Name: &amp;quot;Virginia&amp;quot;, YearBorn: &amp;quot;1600&amp;quot; },
-	{ Name: &amp;quot;Vincenzo&amp;quot;, YearBorn: &amp;quot;1606&amp;quot; }
-]}
+	{ Name: &amp;quot;Gibran Rakabuming&amp;quot;, YearBorn: &amp;quot;1988&amp;quot; },
+	{ Name: &amp;quot;Kahiyang Ayu&amp;quot;, YearBorn: &amp;quot;1991&amp;quot; },
+	{ Name: &amp;quot;Kaesang Pangarep&amp;quot;, YearBorn: &amp;quot;1994&amp;quot; }
+	]
+}
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Since documents are JSON-based, the impedance mismatch that exists between the object-oriented and relational database worlds is gone. An object graph is simply serialized into JSON for storage. Now, the complexity of the entity has a small impact on the performance. Entire object graphs can be read and written in one database operation. There is no need to perform a series of select statements or create complex stored procedures to read the related objects.&lt;/p&gt;
