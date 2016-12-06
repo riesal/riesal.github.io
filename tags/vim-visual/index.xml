@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title>Vim Visual on M. Fahrizal Rahman </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>https://riesal.github.io/tags/vim-visual/</link>
+    <language>en-us</language>
+    
+    
+    <updated>Sat, 19 Nov 2016 09:12:28 &#43;0000</updated>
+    
+    <item>
+      <title>VIM Cheatsheet</title>
+      <link>https://riesal.github.io/2016/11/vim-cheatseet/</link>
+      <pubDate>Sat, 19 Nov 2016 09:12:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/11/vim-cheatseet/</guid>
+      <description>&lt;p&gt;&lt;div class=&#34;commands-container&#34;&gt;
+    &lt;div class=&#34;grid-block&#34;&gt;
+      &lt;div class=&#34;grid-lg-1-3&#34;&gt;
+        &lt;h2&gt;Global&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:help keyword&lt;/kbd&gt; - open help for keyword&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:o file&lt;/kbd&gt; - open file&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:saveas file&lt;/kbd&gt; - save file as&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:close&lt;/kbd&gt; - close current pane&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Cursor movement&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;h&lt;/kbd&gt; - move cursor left&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;j&lt;/kbd&gt; - move cursor down&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;k&lt;/kbd&gt; - move cursor up&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;l&lt;/kbd&gt; - move cursor right&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;H&lt;/kbd&gt; - move to top of screen&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;M&lt;/kbd&gt; - move to middle of screen&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;L&lt;/kbd&gt; - move to bottom of screen&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;w&lt;/kbd&gt; - jump forwards to the start of a word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;W&lt;/kbd&gt; - jump forwards to the start of a word (words can contain punctuation)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;e&lt;/kbd&gt; - jump forwards to the end of a word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;E&lt;/kbd&gt; - jump forwards to the end of a word (words can contain punctuation)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;b&lt;/kbd&gt; - jump backwards to the start of a word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;B&lt;/kbd&gt; - jump backwards to the start of a word (words can contain punctuation)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;0&lt;/kbd&gt; - jump to the start of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;^&lt;/kbd&gt; - jump to the first non-blank character of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;$&lt;/kbd&gt; - jump to the end of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;g_&lt;/kbd&gt; - jump to the last non-blank character of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;gg&lt;/kbd&gt; - go to the first line of the document&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;G&lt;/kbd&gt; - go to the last line of the document&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;5G&lt;/kbd&gt; - go to line 5&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;fx&lt;/kbd&gt; - jump to next occurrence of character x&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;tx&lt;/kbd&gt; - jump to before next occurrence of character x&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;}&lt;/kbd&gt; - jump to next paragraph (or function/block, when editing code)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;{&lt;/kbd&gt; - jump to previous paragraph (or function/block, when editing code)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;b&lt;/kbd&gt; - move back one full screen&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;f&lt;/kbd&gt; - move forward one full screen&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;d&lt;/kbd&gt; - move forward &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;2&lt;/sub&gt; a screen&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;u&lt;/kbd&gt; - move back &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;2&lt;/sub&gt; a screen&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;div class=&#34;well&#34;&gt;
+          &lt;strong&gt;Tip&lt;/strong&gt; Prefix a cursor movement command with a number to repeat it. For example, &lt;kbd&gt;4j&lt;/kbd&gt; moves down 4 lines.
+        &lt;/div&gt;
+        &lt;h2&gt;Insert mode - inserting/appending text&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;i&lt;/kbd&gt; - insert before the cursor&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;I&lt;/kbd&gt; - insert at the beginning of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;a&lt;/kbd&gt; - insert (append) after the cursor&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;A&lt;/kbd&gt; - insert (append) at the end of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;o&lt;/kbd&gt; - append (open) a new line below the current line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;O&lt;/kbd&gt; - append (open) a new line above the current line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;ea&lt;/kbd&gt; - insert (append) at the end of the word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Esc&lt;/kbd&gt; - exit insert mode&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;div class=&#34;grid-lg-1-3&#34;&gt;
+        &lt;h2&gt;Editing&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;r&lt;/kbd&gt; - replace a single character&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;J&lt;/kbd&gt; - join line below to the current one&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;cc&lt;/kbd&gt; - change (replace) entire line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;cw&lt;/kbd&gt; - change (replace) to the end of the word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;c$&lt;/kbd&gt; - change (replace) to the end of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;s&lt;/kbd&gt; - delete character and substitute text&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;S&lt;/kbd&gt; - delete line and substitute text (same as cc)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;xp&lt;/kbd&gt; - transpose two letters (delete and paste)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;u&lt;/kbd&gt; - undo&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;r&lt;/kbd&gt; - redo&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;.&lt;/kbd&gt; - repeat last command&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Marking text (visual mode)&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;v&lt;/kbd&gt; - start visual mode, mark lines, then do a command (like y-yank)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;V&lt;/kbd&gt; - start linewise visual mode&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;o&lt;/kbd&gt; - move to other end of marked area&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;v&lt;/kbd&gt; - start visual block mode&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;O&lt;/kbd&gt; - move to other corner of block&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;aw&lt;/kbd&gt; - mark a word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;ab&lt;/kbd&gt; - a block with ()&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;aB&lt;/kbd&gt; - a block with {}&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;ib&lt;/kbd&gt; - inner block with ()&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;iB&lt;/kbd&gt; - inner block with {}&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Esc&lt;/kbd&gt; - exit visual mode&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Visual commands&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;&amp;#62;&lt;/kbd&gt; - shift text right&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;&amp;#60;&lt;/kbd&gt; - shift text left&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;y&lt;/kbd&gt; - yank (copy) marked text&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;d&lt;/kbd&gt; - delete marked text&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;~&lt;/kbd&gt; - switch case&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Registers&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:reg&lt;/kbd&gt; - show registers content&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;&amp;ldquo;xy&lt;/kbd&gt; - yank into register x&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;&amp;ldquo;0p&lt;/kbd&gt; - paste contents of register x&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;div class=&#34;well&#34;&gt;
+          &lt;strong&gt;Tip&lt;/strong&gt; Registers are being stored in ~/.viminfo, and will be loaded again on next restart of vim.
+        &lt;/div&gt;
+        &lt;div class=&#34;well&#34;&gt;
+          &lt;strong&gt;Tip&lt;/strong&gt; Register 0 contains always the value of the last yank command.
+        &lt;/div&gt;
+        &lt;h2&gt;Marks&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:marks&lt;/kbd&gt; - list of marks&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;ma&lt;/kbd&gt; - set current position for mark A&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;&lt;code&gt;a&amp;lt;/kbd&amp;gt; - jump to position of mark A&amp;lt;/li&amp;gt;
+          &amp;lt;li&amp;gt;&amp;lt;kbd&amp;gt;y&lt;/code&gt;a&lt;/kbd&gt; - yank text to position of mark A&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Macros&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;qa&lt;/kbd&gt; - record macro a&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;qq&lt;/kbd&gt; - stop recording macro&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;@@&lt;/kbd&gt; - rerun last run macro&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;div class=&#34;grid-lg-1-3&#34;&gt;
+        &lt;h2&gt;Cut and paste&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;yy&lt;/kbd&gt; - yank (copy) a line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;2yy&lt;/kbd&gt; - yank (copy) 2 lines&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;yw&lt;/kbd&gt; - yank (copy) the characters of the word from the cursor position to the start of the next word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;y$&lt;/kbd&gt; - yank (copy) to end of line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;p&lt;/kbd&gt; - put (paste) the clipboard after cursor&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;P&lt;/kbd&gt; - put (paste) before cursor&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;dd&lt;/kbd&gt; - delete (cut) a line&lt;/li&gt;
+      &lt;li&gt;&lt;kbd&gt;dG&lt;/kbd&gt; - delete from the current line to the end of file
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;v&lt;/kbd&gt; + &lt;kbd&gt;G&lt;/kbd&gt; + &lt;kbd&gt;d&lt;/kbd&gt; - using visual mode: delete from the current line to the end of file
+          &lt;li&gt;&lt;kbd&gt;2dd&lt;/kbd&gt; - delete (cut) 2 lines&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;dw&lt;/kbd&gt; - delete (cut) the characters of the word from the cursor position to the start of the next word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;D&lt;/kbd&gt; - delete (cut) to the end of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;d$&lt;/kbd&gt; - delete (cut) to the end of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;x&lt;/kbd&gt; - delete (cut) character&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Exiting&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:w&lt;/kbd&gt; - write (save) the file, but don&amp;rsquo;t exit&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:w !sudo tee %&lt;/kbd&gt; - write out the current file using sudo&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:wq&lt;/kbd&gt; or &lt;kbd&gt;:x&lt;/kbd&gt; or &lt;kbd&gt;ZZ&lt;/kbd&gt; - write (save) and quit&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:q&lt;/kbd&gt; - quit (fails if there are unsaved changes)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:q!&lt;/kbd&gt; or &lt;kbd&gt;ZQ&lt;/kbd&gt; - quit and throw away unsaved changes&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Search and replace&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;/pattern&lt;/kbd&gt; - search for pattern&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;?pattern&lt;/kbd&gt; - search backward for pattern&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;\vpattern&lt;/kbd&gt; - &amp;lsquo;very magic&amp;rsquo; pattern: non-alphanumeric characters are interpreted as special regex symbols (no escaping needed)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;n&lt;/kbd&gt; - repeat search in same direction&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;N&lt;/kbd&gt; - repeat search in opposite direction&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:%s/old/new/g&lt;/kbd&gt; - replace all old with new throughout file&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:%s/old/new/gc&lt;/kbd&gt; - replace all old with new throughout file with confirmations&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:noh&lt;/kbd&gt; - remove highlighting of search matches&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Search in multiple files&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:vimgrep /pattern/ {file}&lt;/kbd&gt; - search for pattern in multiple files&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;div class=&#34;well&#34;&gt;
+          e.g.
+          &lt;kbd&gt;:vimgrep /foo/ *&lt;em&gt;/&lt;/em&gt;&lt;/kbd&gt;
+        &lt;/div&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:cn&lt;/kbd&gt; - jump to the next match&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:cp&lt;/kbd&gt; - jump to the previous match&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:copen&lt;/kbd&gt; - open a window containing the list of matches&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt; &lt;!-- end grid-block --&gt;
+    &lt;div class=&#34;grid-block&#34;&gt;
+      &lt;div class=&#34;grid-lg-1-3&#34;&gt;
+        &lt;h2&gt;Working with multiple files&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:e file&lt;/kbd&gt; - edit a file in a new buffer&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:bnext&lt;/kbd&gt; or &lt;kbd&gt;:bn&lt;/kbd&gt; - go to the next buffer&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:bprev&lt;/kbd&gt; or &lt;kbd&gt;:bp&lt;/kbd&gt; - go to the previous buffer&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:bd&lt;/kbd&gt; - delete a buffer (close a file)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:ls&lt;/kbd&gt; - list all open buffers&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:sp file&lt;/kbd&gt; - open a file in a new buffer and split window&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:vsp file&lt;/kbd&gt; - open a file in a new buffer and vertically split window&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;ws&lt;/kbd&gt; - split window&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;ww&lt;/kbd&gt; - switch windows&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wq&lt;/kbd&gt; - quit a window&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wv&lt;/kbd&gt; - split window vertically&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wh&lt;/kbd&gt; - move cursor to the left window (vertical split)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wl&lt;/kbd&gt; - move cursor to the right window (vertical split)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wj&lt;/kbd&gt; - move cursor to the window below (horizontal split)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wk&lt;/kbd&gt; - move cursor to the window above (horizontal split)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;div class=&#34;grid-lg-1-3&#34;&gt;
+        &lt;h2&gt;Tabs&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:tabnew&lt;/kbd&gt; or &lt;kbd&gt;:tabn file&lt;/kbd&gt; - open a file in a new tab&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wT&lt;/kbd&gt;  - move the current split window into its own tab&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;gt&lt;/kbd&gt; or &lt;kbd&gt;:tabnext&lt;/kbd&gt; or &lt;kbd&gt;:tabn&lt;/kbd&gt;  - move to the next tab&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;gT&lt;/kbd&gt; or &lt;kbd&gt;:tabprev&lt;/kbd&gt; or &lt;kbd&gt;:tabp&lt;/kbd&gt;  - move to the previous tab&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;#gt&lt;/kbd&gt; - move to tab number #&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:tabmove #&lt;/kbd&gt; - move current tab to the #th position (indexed from 0)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:tabclose&lt;/kbd&gt; or &lt;kbd&gt;:tabc&lt;/kbd&gt; - close the current tab and all its windows&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:tabonly&lt;/kbd&gt; or &lt;kbd&gt;:tabo&lt;/kbd&gt; - close all tabs except for the current one&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:tabdo&lt;/kbd&gt; command - run the &lt;code&gt;command&lt;/code&gt; on all tabs (e.g. &lt;code&gt;:tabdo q&lt;/code&gt; - closes all opened tabs)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt; &lt;!-- end grid-block --&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

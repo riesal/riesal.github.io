@@ -80,6 +80,222 @@ tar -cvzf textfiles.tar.gz --files-from /tmp/file.manifest --remove-files
     </item>
     
     <item>
+      <title>VIM Cheatsheet</title>
+      <link>https://riesal.github.io/2016/11/vim-cheatseet/</link>
+      <pubDate>Sat, 19 Nov 2016 09:12:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/11/vim-cheatseet/</guid>
+      <description>&lt;p&gt;&lt;div class=&#34;commands-container&#34;&gt;
+    &lt;div class=&#34;grid-block&#34;&gt;
+      &lt;div class=&#34;grid-lg-1-3&#34;&gt;
+        &lt;h2&gt;Global&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:help keyword&lt;/kbd&gt; - open help for keyword&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:o file&lt;/kbd&gt; - open file&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:saveas file&lt;/kbd&gt; - save file as&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:close&lt;/kbd&gt; - close current pane&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Cursor movement&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;h&lt;/kbd&gt; - move cursor left&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;j&lt;/kbd&gt; - move cursor down&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;k&lt;/kbd&gt; - move cursor up&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;l&lt;/kbd&gt; - move cursor right&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;H&lt;/kbd&gt; - move to top of screen&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;M&lt;/kbd&gt; - move to middle of screen&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;L&lt;/kbd&gt; - move to bottom of screen&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;w&lt;/kbd&gt; - jump forwards to the start of a word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;W&lt;/kbd&gt; - jump forwards to the start of a word (words can contain punctuation)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;e&lt;/kbd&gt; - jump forwards to the end of a word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;E&lt;/kbd&gt; - jump forwards to the end of a word (words can contain punctuation)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;b&lt;/kbd&gt; - jump backwards to the start of a word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;B&lt;/kbd&gt; - jump backwards to the start of a word (words can contain punctuation)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;0&lt;/kbd&gt; - jump to the start of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;^&lt;/kbd&gt; - jump to the first non-blank character of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;$&lt;/kbd&gt; - jump to the end of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;g_&lt;/kbd&gt; - jump to the last non-blank character of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;gg&lt;/kbd&gt; - go to the first line of the document&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;G&lt;/kbd&gt; - go to the last line of the document&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;5G&lt;/kbd&gt; - go to line 5&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;fx&lt;/kbd&gt; - jump to next occurrence of character x&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;tx&lt;/kbd&gt; - jump to before next occurrence of character x&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;}&lt;/kbd&gt; - jump to next paragraph (or function/block, when editing code)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;{&lt;/kbd&gt; - jump to previous paragraph (or function/block, when editing code)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;b&lt;/kbd&gt; - move back one full screen&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;f&lt;/kbd&gt; - move forward one full screen&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;d&lt;/kbd&gt; - move forward &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;2&lt;/sub&gt; a screen&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;u&lt;/kbd&gt; - move back &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;2&lt;/sub&gt; a screen&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;div class=&#34;well&#34;&gt;
+          &lt;strong&gt;Tip&lt;/strong&gt; Prefix a cursor movement command with a number to repeat it. For example, &lt;kbd&gt;4j&lt;/kbd&gt; moves down 4 lines.
+        &lt;/div&gt;
+        &lt;h2&gt;Insert mode - inserting/appending text&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;i&lt;/kbd&gt; - insert before the cursor&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;I&lt;/kbd&gt; - insert at the beginning of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;a&lt;/kbd&gt; - insert (append) after the cursor&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;A&lt;/kbd&gt; - insert (append) at the end of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;o&lt;/kbd&gt; - append (open) a new line below the current line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;O&lt;/kbd&gt; - append (open) a new line above the current line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;ea&lt;/kbd&gt; - insert (append) at the end of the word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Esc&lt;/kbd&gt; - exit insert mode&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;div class=&#34;grid-lg-1-3&#34;&gt;
+        &lt;h2&gt;Editing&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;r&lt;/kbd&gt; - replace a single character&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;J&lt;/kbd&gt; - join line below to the current one&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;cc&lt;/kbd&gt; - change (replace) entire line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;cw&lt;/kbd&gt; - change (replace) to the end of the word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;c$&lt;/kbd&gt; - change (replace) to the end of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;s&lt;/kbd&gt; - delete character and substitute text&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;S&lt;/kbd&gt; - delete line and substitute text (same as cc)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;xp&lt;/kbd&gt; - transpose two letters (delete and paste)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;u&lt;/kbd&gt; - undo&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;r&lt;/kbd&gt; - redo&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;.&lt;/kbd&gt; - repeat last command&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Marking text (visual mode)&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;v&lt;/kbd&gt; - start visual mode, mark lines, then do a command (like y-yank)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;V&lt;/kbd&gt; - start linewise visual mode&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;o&lt;/kbd&gt; - move to other end of marked area&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;v&lt;/kbd&gt; - start visual block mode&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;O&lt;/kbd&gt; - move to other corner of block&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;aw&lt;/kbd&gt; - mark a word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;ab&lt;/kbd&gt; - a block with ()&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;aB&lt;/kbd&gt; - a block with {}&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;ib&lt;/kbd&gt; - inner block with ()&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;iB&lt;/kbd&gt; - inner block with {}&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Esc&lt;/kbd&gt; - exit visual mode&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Visual commands&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;&amp;#62;&lt;/kbd&gt; - shift text right&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;&amp;#60;&lt;/kbd&gt; - shift text left&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;y&lt;/kbd&gt; - yank (copy) marked text&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;d&lt;/kbd&gt; - delete marked text&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;~&lt;/kbd&gt; - switch case&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Registers&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:reg&lt;/kbd&gt; - show registers content&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;&amp;ldquo;xy&lt;/kbd&gt; - yank into register x&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;&amp;ldquo;0p&lt;/kbd&gt; - paste contents of register x&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;div class=&#34;well&#34;&gt;
+          &lt;strong&gt;Tip&lt;/strong&gt; Registers are being stored in ~/.viminfo, and will be loaded again on next restart of vim.
+        &lt;/div&gt;
+        &lt;div class=&#34;well&#34;&gt;
+          &lt;strong&gt;Tip&lt;/strong&gt; Register 0 contains always the value of the last yank command.
+        &lt;/div&gt;
+        &lt;h2&gt;Marks&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:marks&lt;/kbd&gt; - list of marks&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;ma&lt;/kbd&gt; - set current position for mark A&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;&lt;code&gt;a&amp;lt;/kbd&amp;gt; - jump to position of mark A&amp;lt;/li&amp;gt;
+          &amp;lt;li&amp;gt;&amp;lt;kbd&amp;gt;y&lt;/code&gt;a&lt;/kbd&gt; - yank text to position of mark A&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Macros&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;qa&lt;/kbd&gt; - record macro a&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;qq&lt;/kbd&gt; - stop recording macro&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;@@&lt;/kbd&gt; - rerun last run macro&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;div class=&#34;grid-lg-1-3&#34;&gt;
+        &lt;h2&gt;Cut and paste&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;yy&lt;/kbd&gt; - yank (copy) a line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;2yy&lt;/kbd&gt; - yank (copy) 2 lines&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;yw&lt;/kbd&gt; - yank (copy) the characters of the word from the cursor position to the start of the next word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;y$&lt;/kbd&gt; - yank (copy) to end of line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;p&lt;/kbd&gt; - put (paste) the clipboard after cursor&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;P&lt;/kbd&gt; - put (paste) before cursor&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;dd&lt;/kbd&gt; - delete (cut) a line&lt;/li&gt;
+      &lt;li&gt;&lt;kbd&gt;dG&lt;/kbd&gt; - delete from the current line to the end of file
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;v&lt;/kbd&gt; + &lt;kbd&gt;G&lt;/kbd&gt; + &lt;kbd&gt;d&lt;/kbd&gt; - using visual mode: delete from the current line to the end of file
+          &lt;li&gt;&lt;kbd&gt;2dd&lt;/kbd&gt; - delete (cut) 2 lines&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;dw&lt;/kbd&gt; - delete (cut) the characters of the word from the cursor position to the start of the next word&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;D&lt;/kbd&gt; - delete (cut) to the end of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;d$&lt;/kbd&gt; - delete (cut) to the end of the line&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;x&lt;/kbd&gt; - delete (cut) character&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Exiting&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:w&lt;/kbd&gt; - write (save) the file, but don&amp;rsquo;t exit&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:w !sudo tee %&lt;/kbd&gt; - write out the current file using sudo&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:wq&lt;/kbd&gt; or &lt;kbd&gt;:x&lt;/kbd&gt; or &lt;kbd&gt;ZZ&lt;/kbd&gt; - write (save) and quit&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:q&lt;/kbd&gt; - quit (fails if there are unsaved changes)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:q!&lt;/kbd&gt; or &lt;kbd&gt;ZQ&lt;/kbd&gt; - quit and throw away unsaved changes&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Search and replace&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;/pattern&lt;/kbd&gt; - search for pattern&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;?pattern&lt;/kbd&gt; - search backward for pattern&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;\vpattern&lt;/kbd&gt; - &amp;lsquo;very magic&amp;rsquo; pattern: non-alphanumeric characters are interpreted as special regex symbols (no escaping needed)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;n&lt;/kbd&gt; - repeat search in same direction&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;N&lt;/kbd&gt; - repeat search in opposite direction&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:%s/old/new/g&lt;/kbd&gt; - replace all old with new throughout file&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:%s/old/new/gc&lt;/kbd&gt; - replace all old with new throughout file with confirmations&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:noh&lt;/kbd&gt; - remove highlighting of search matches&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;h2&gt;Search in multiple files&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:vimgrep /pattern/ {file}&lt;/kbd&gt; - search for pattern in multiple files&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;div class=&#34;well&#34;&gt;
+          e.g.
+          &lt;kbd&gt;:vimgrep /foo/ *&lt;em&gt;/&lt;/em&gt;&lt;/kbd&gt;
+        &lt;/div&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:cn&lt;/kbd&gt; - jump to the next match&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:cp&lt;/kbd&gt; - jump to the previous match&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:copen&lt;/kbd&gt; - open a window containing the list of matches&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt; &lt;!-- end grid-block --&gt;
+    &lt;div class=&#34;grid-block&#34;&gt;
+      &lt;div class=&#34;grid-lg-1-3&#34;&gt;
+        &lt;h2&gt;Working with multiple files&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:e file&lt;/kbd&gt; - edit a file in a new buffer&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:bnext&lt;/kbd&gt; or &lt;kbd&gt;:bn&lt;/kbd&gt; - go to the next buffer&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:bprev&lt;/kbd&gt; or &lt;kbd&gt;:bp&lt;/kbd&gt; - go to the previous buffer&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:bd&lt;/kbd&gt; - delete a buffer (close a file)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:ls&lt;/kbd&gt; - list all open buffers&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:sp file&lt;/kbd&gt; - open a file in a new buffer and split window&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:vsp file&lt;/kbd&gt; - open a file in a new buffer and vertically split window&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;ws&lt;/kbd&gt; - split window&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;ww&lt;/kbd&gt; - switch windows&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wq&lt;/kbd&gt; - quit a window&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wv&lt;/kbd&gt; - split window vertically&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wh&lt;/kbd&gt; - move cursor to the left window (vertical split)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wl&lt;/kbd&gt; - move cursor to the right window (vertical split)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wj&lt;/kbd&gt; - move cursor to the window below (horizontal split)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wk&lt;/kbd&gt; - move cursor to the window above (horizontal split)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;div class=&#34;grid-lg-1-3&#34;&gt;
+        &lt;h2&gt;Tabs&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;kbd&gt;:tabnew&lt;/kbd&gt; or &lt;kbd&gt;:tabn file&lt;/kbd&gt; - open a file in a new tab&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;wT&lt;/kbd&gt;  - move the current split window into its own tab&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;gt&lt;/kbd&gt; or &lt;kbd&gt;:tabnext&lt;/kbd&gt; or &lt;kbd&gt;:tabn&lt;/kbd&gt;  - move to the next tab&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;gT&lt;/kbd&gt; or &lt;kbd&gt;:tabprev&lt;/kbd&gt; or &lt;kbd&gt;:tabp&lt;/kbd&gt;  - move to the previous tab&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;#gt&lt;/kbd&gt; - move to tab number #&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:tabmove #&lt;/kbd&gt; - move current tab to the #th position (indexed from 0)&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:tabclose&lt;/kbd&gt; or &lt;kbd&gt;:tabc&lt;/kbd&gt; - close the current tab and all its windows&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:tabonly&lt;/kbd&gt; or &lt;kbd&gt;:tabo&lt;/kbd&gt; - close all tabs except for the current one&lt;/li&gt;
+          &lt;li&gt;&lt;kbd&gt;:tabdo&lt;/kbd&gt; command - run the &lt;code&gt;command&lt;/code&gt; on all tabs (e.g. &lt;code&gt;:tabdo q&lt;/code&gt; - closes all opened tabs)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt; &lt;!-- end grid-block --&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>MySQL Replication Type</title>
       <link>https://riesal.github.io/2016/10/mysql-replication-type/</link>
       <pubDate>Tue, 11 Oct 2016 18:12:28 &#43;0000</pubDate>
@@ -1319,145 +1535,6 @@ Instance metadata is data about your instance that you can use to configure or m
 &lt;p&gt;No one likes feeling that they’ll be dropped as soon as they finalize their online purchase. On your e-commerce site, make it known that you back up your product or service and that you are willing to help your customers, especially after they click that ‘Submit Order’ button. If you’re running an online tech business, such as reselling domain names or web hosting, make sure your visitors know that if they choose your service, you’ll provide reliable and ongoing tech support.&lt;/p&gt;
 
 &lt;p&gt;E-commerce can be a challenge, but if you apply the right techniques you can see a big boost in online business. If you don’t have your e-commerce site set up quite yet, make sure to take these tips into account to put your online store above the competition!&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Amazon Inspector helps Sysadmin to automate security assessment</title>
-      <link>https://riesal.github.io/2016/05/amazon-inspector-helps-sysadmin-automate-security-assessment/</link>
-      <pubDate>Sat, 07 May 2016 07:29:21 &#43;0000</pubDate>
-      
-      <guid>https://riesal.github.io/2016/05/amazon-inspector-helps-sysadmin-automate-security-assessment/</guid>
-      <description>
-
-&lt;p&gt;Anyone who has ever worked with PHP, Apache or MySQL Web applications is aware of how quickly vulnerabilities can surface and become widespread problems. Security and vulnerability testing are standard among many of these application types because they&amp;#8217;re frequently used. Consequently, attackers target these types of apps. Every system is vulnerable, making it nearly impossible to keep up with all of the security updates manually.&lt;/p&gt;
-
-&lt;div class=&#34;ad-wrapper ad-embedded&#34;&gt;
-  Many developers rely on third-party software for an automated security assessment. This is similar to how consumers would actively run virus scanning software to protect against known threats.
-&lt;/div&gt;
-
-&lt;p&gt;Amazon Inspector automatically detects common security issues and vulnerabilities in a Web application, as determined by the security community. AWS manages the service, making it simple to point it to an application and have the service check against known vulnerabilities that may affect it. Amazon Inspector is similar to an advanced version of &lt;a href=&#34;http://blog.intispace.com/2016/05/aws-trusted-advisor/&#34;&gt;AWS Trusted Advisor&lt;/a&gt;, but it&amp;#8217;s specific to security checks within an application.&lt;/p&gt;
-
-&lt;p&gt;Amazon Inspector is available in the AWS Management Console under &amp;#8220;Security &amp;amp; Identity.&amp;#8221;&lt;figure class=&#34;main-article-image&#34; data-img-fullsize=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure1\_5416.png&#34;&gt;&lt;img class=&#34;swap&#34; src=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure1\_5416\_desktop.png&#34; alt=&#34;Amazon Inspector in the AWS Management Console.&#34; data-img320=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure1\_5416\_mobile.png&#34; data-img640=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure1\_5416_desktop.png&#34; /&gt;&lt;/p&gt; &lt;figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;i class=&#34;icon pictures&#34; data-icon=&#34;z&#34;&gt;&lt;/i&gt;Select the &amp;#8216;Security &amp;amp; Identity&amp;#8217; tab to find Amazon Inspector.&lt;/figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;main-article-image-enlarge&#34;&gt;
-&lt;/div&gt;&lt;/figure&gt;&lt;/p&gt;
-
-&lt;p&gt;Amazon Inspector requires an AWS Identity and Access Management (IAM) role, which requires access to the &amp;#8220;DescribeInstances&amp;#8221; command for Elastic Compute Cloud (EC2). Fortunately, Amazon provides a simple auto-creation process to automatically generate this basic role.&lt;figure class=&#34;main-article-image&#34; data-img-fullsize=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure2\_5416.png&#34;&gt;&lt;img class=&#34;swap&#34; src=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure2\_5416\_desktop.png&#34; alt=&#34;Automatically create roles in AWS.&#34; data-img320=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure2\_5416\_mobile.png&#34; data-img640=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure2\_5416_desktop.png&#34; /&gt;&lt;/p&gt; &lt;figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;i class=&#34;icon pictures&#34; data-icon=&#34;z&#34;&gt;&lt;/i&gt;Users can create roles and tag EC2 instances when getting started with Inspector.&lt;/figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;main-article-image-enlarge&#34;&gt;
-&lt;/div&gt;&lt;/figure&gt;&lt;/p&gt;
-
-&lt;p&gt;After automatically creating the IAM role, a developer needs to tell Inspector which instances need to be checked. This is done by applying specific tags to EC2 instances that need to be monitored, such as the Web application&amp;#8217;s servers. If these are running in AWS Elastic Beanstalk, be sure to apply these tags from within Elastic Beanstalk. Alternatively, if these instances are part of an Auto Scaling group outside of Elastic Beanstalk, that Auto Scaling group must be modified to automatically assign those tags. If a developer only tags the instances, the tags will not be available on new instances when they replace the old ones, and Inspector won&amp;#8217;t monitor them.&lt;/p&gt;
-
-&lt;p&gt;Elastic Beanstalk environments only allow developers to add tags on initial creation. They do not allow developers to modify those values without creating a new environment. However, it doesn&amp;#8217;t matter what tags are applied, as long as there are tags that can be used to identify the resources that must be monitored.&lt;/p&gt;
-
-&lt;p&gt;To create a Resource Group to identify Web servers, select the resources by a tag that are Web servers within the tag manager. Then click on the view as resource group. In this example, I grouped them by choosing the names of my environments.&lt;figure class=&#34;main-article-image&#34; data-img-fullsize=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure3\_5416.png&#34;&gt;&lt;img class=&#34;swap&#34; src=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure3\_5416\_desktop.png&#34; alt=&#34;Resource groups help identify servers.&#34; data-img320=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure3\_5416\_mobile.png&#34; data-img640=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure3\_5416_desktop.png&#34; /&gt;&lt;/p&gt; &lt;figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;i class=&#34;icon pictures&#34; data-icon=&#34;z&#34;&gt;&lt;/i&gt;The tag manager helps users group and track tagged resources.&lt;/figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;main-article-image-enlarge&#34;&gt;
-&lt;/div&gt;&lt;/figure&gt;&lt;/p&gt;
-
-&lt;p&gt;Next, install the AWS agent on all servers that need to be monitored. This is different from many third-party security monitoring tools, as it acts as an internal or white box testing platform because the agent knows more about the configuration of each EC2 instance.&lt;/p&gt;
-
-&lt;p&gt;If using Auto Scaling or Elastic Beanstalk, don&amp;#8217;t just install the agent right on the EC2 instances. If using Auto Scaling, consider updating the launch configuration to include the following as a user data script:&lt;/p&gt;
-
-&lt;p&gt;#!/bin/bash&lt;/p&gt;
-
-&lt;p&gt;apt-get update &amp;amp;&amp;amp; apt-get upgrade -y&lt;/p&gt;
-
-&lt;p&gt;curl &lt;a href=&#34;https://d1wk0tztpsntt1.cloudfront.net/linux/latest/install&#34;&gt;https://d1wk0tztpsntt1.cloudfront.net/linux/latest/install&lt;/a&gt; | sh&lt;/p&gt;
-
-&lt;p&gt;Add the following script under the uploaded source code under: .ebextensions/awsagent.config for Elastic Beanstalk instances.&lt;/p&gt;
-
-&lt;p&gt;commands:&lt;/p&gt;
-
-&lt;p&gt;install_awsagent:&lt;/p&gt;
-
-&lt;p&gt;command: &amp;#8220;curl &lt;a href=&#34;https://d1wk0tztpsntt1.cloudfront.net/linux/latest/install&#34;&gt;https://d1wk0tztpsntt1.cloudfront.net/linux/latest/install&lt;/a&gt; | sh&amp;#8221;&lt;/p&gt;
-
-&lt;p&gt;Once this is set up and you verify the AWS agent is running, it&amp;#8217;s time to set up the assessment target &amp;#8212; a group of EC2 Instances &amp;#8212; for Amazon Inspector to monitor.&lt;figure class=&#34;main-article-image&#34; data-img-fullsize=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure4\_5416.png&#34;&gt;&lt;img class=&#34;swap&#34; src=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure4\_5416\_desktop.png&#34; alt=&#34;Define an assessment target.&#34; data-img320=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure4\_5416\_mobile.png&#34; data-img640=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure4\_5416_desktop.png&#34; /&gt;&lt;/p&gt; &lt;figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;i class=&#34;icon pictures&#34; data-icon=&#34;z&#34;&gt;&lt;/i&gt;Determine which EC2 instances you want Amazon Inspector to monitor.&lt;/figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;main-article-image-enlarge&#34;&gt;
-&lt;/div&gt;&lt;/figure&gt;&lt;/p&gt;
-
-&lt;p&gt;Next, define &lt;a href=&#34;https://docs.aws.amazon.com/inspector/latest/userguide/inspector_assessments.html&#34; target=&#34;_blank&#34;&gt;what tests should run&lt;/a&gt;.&lt;figure class=&#34;main-article-image&#34; data-img-fullsize=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure5\_5416.png&#34;&gt;&lt;img class=&#34;swap&#34; src=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure5\_5416\_desktop.png&#34; alt=&#34;Specify configurations for an assessment run.&#34; data-img320=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure5\_5416\_mobile.png&#34; data-img640=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure5\_5416_desktop.png&#34; /&gt;&lt;/p&gt; &lt;figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;i class=&#34;icon pictures&#34; data-icon=&#34;z&#34;&gt;&lt;/i&gt;Users choose the rules packages, duration, SNS notifications and labels for their automated security assessment.&lt;/figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;main-article-image-enlarge&#34;&gt;
-&lt;/div&gt;&lt;/figure&gt;&lt;/p&gt;
-
-&lt;p&gt;In my example, I chose all available checks. Note the &amp;#8220;duration&amp;#8221; here isn&amp;#8217;t how often to check, but how long each check should run. The default time period is one hour. But, for highly secure systems, developers may wish to have these checks run longer. The 15-minute interval should only be used for low-security environments where performance effect is more of an issue than security.&lt;/p&gt;
-
-&lt;p&gt;Once this is set, complete the creation of the template by following the prompts and the following screen will appear:&lt;figure class=&#34;main-article-image&#34; data-img-fullsize=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure6\_5416.png&#34;&gt;&lt;img class=&#34;swap&#34; src=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure6\_5416\_desktop.png&#34; alt=&#34;Completed assessment templates.&#34; data-img320=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure6\_5416\_mobile.png&#34; data-img640=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure6\_5416_desktop.png&#34; /&gt;&lt;/p&gt; &lt;figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;i class=&#34;icon pictures&#34; data-icon=&#34;z&#34;&gt;&lt;/i&gt;Amazon Inspector displays completed assessment templates.&lt;/figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;main-article-image-enlarge&#34;&gt;
-&lt;/div&gt;&lt;/figure&gt;&lt;/p&gt;
-
-&lt;p&gt;From this screen, you can run a one-time test by clicking on the checkbox and choosing &lt;strong&gt;Run&lt;/strong&gt;. You can also view existing runs, create a new template or stop running tests. There is no way to schedule runs with the AWS Management Console, but this could easily be achieved using AWS Lambda with CloudWatch Events. Consider using the simple Lambda script:&lt;/p&gt;
-
-&lt;p&gt;var AWS = require(&amp;#8216;aws-sdk&amp;#8217;);&lt;/p&gt;
-
-&lt;p&gt;var inspector = new AWS.Inspector({ region: &amp;#8216;us-east-1&amp;#8217; });&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;exports.handler = function(event, context, callback){&lt;/p&gt;
-
-&lt;p&gt;inspector.startAssessmentRun({&lt;/p&gt;
-
-&lt;p&gt;assessmentTemplateArn: &amp;#8216;arn:aws:inspector:us-east-1:ACCOUNTED:target/ID/template/ID&amp;#8217;&lt;/p&gt;
-
-&lt;p&gt;}, callback);&lt;/p&gt;
-
-&lt;p&gt;}&lt;/p&gt;
-
-&lt;p&gt;Developers can find the assessment template Amazon Resource Name on the &lt;strong&gt;Assessments Templates&lt;/strong&gt; view page by clicking the arrow next to the assessment template name.&lt;/p&gt;
-
-&lt;p&gt;This Lambda function can be triggered from either a CloudWatch Events rule (i.e., regular weekly, daily and so on) or as part of a continuous delivery mechanism to verify an application after initial deployment.&lt;section class=&#34;section main-article-chapter&#34; data-menu-title=&#34;Analyzing Amazon Inspector findings&#34;&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;i-class-icon-data-icon-1-i-analyzing-amazon-inspector-findings-section-title&#34;&gt;&lt;i class=&#34;icon&#34; data-icon=&#34;1&#34;&gt;&lt;/i&gt;Analyzing Amazon Inspector findings {.section-title}&lt;/h3&gt;
-
-&lt;p&gt;The &amp;#8220;findings&amp;#8221; section of Amazon Inspector shows the results of an automated security assessment. Findings will only appear at the end of the run. I saw some pretty basic alerts that will be handled by simply updating to the latest Amazon Machine Image:&lt;figure class=&#34;main-article-image&#34; data-img-fullsize=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure7\_5416.png&#34;&gt;&lt;img class=&#34;swap&#34; src=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure7\_5416\_desktop.png&#34; alt=&#34;Inspector details its findings.&#34; data-img320=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure7\_5416\_mobile.png&#34; data-img640=&#34;http://cdn.ttgtmedia.com/rms/editorial/sAWS\_Figure7\_5416_desktop.png&#34; /&gt;&lt;/p&gt; &lt;figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;i class=&#34;icon pictures&#34; data-icon=&#34;z&#34;&gt;&lt;/i&gt;Amazon Inspector reveals security vulnerabilities and suggested ways to solve those problems.&lt;/figcaption&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;main-article-image-enlarge&#34;&gt;
-&lt;/div&gt;&lt;/figure&gt;&lt;/p&gt;
-
-&lt;p&gt;Click on the side arrow to see more details on the specific vulnerabilities detected as well as suggested ways to resolve the problems.&lt;/section&gt; &lt;section class=&#34;section main-article-chapter&#34; data-menu-title=&#34;Wrapping it up&#34;&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;i-class-icon-data-icon-1-i-wrapping-it-up-section-title&#34;&gt;&lt;i class=&#34;icon&#34; data-icon=&#34;1&#34;&gt;&lt;/i&gt;Wrapping it up {.section-title}&lt;/h3&gt;
-
-&lt;p&gt;Amazon Inspector runs best when there is active traffic coming into the application. So be sure not to schedule runs entirely during off-peak hours. Specifying a 24-hour run period may be ideal, as it helps to gather much more data than would otherwise be discovered. Inspector isn&amp;#8217;t just an always-running process, it&amp;#8217;s an active scan to try to identify any odd behavior with an application and provide an automated security assessment of potential issues, such as client break-in attempts.&lt;/p&gt;
-
-&lt;p&gt;Once a run is completed, the service will give you a list of possible security and vulnerability issues. You can resolve many of these issues by updating the OS of the running instances, so enabling automatic updates will solve many of these types of problems. For others, developers will receive links to the details of the vulnerability or exploit, as well as ways to patch them. Any issues are classified by severity and require manual attention to resolve.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Keep checking the &lt;a href=&#34;http://blog.intispace.com/&#34;&gt;intispace blog&lt;/a&gt; for more upcoming tips on starting your own business.&lt;/strong&gt; Also, send us a tweet &lt;a href=&#34;https://twitter.com/intispace&#34;&gt;@intispace&lt;/a&gt; with your own ideas on what makes a great domain name!&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;wrapper clearfix&#34;&gt;
-  &lt;div class=&#34;content left&#34;&gt;
-    &lt;article class=&#34;post-33335 post type-post status-publish format-standard hentry category-aws tag-amazon-cloudwatch tag-cloudwatch tag-logs&#34;&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&amp;quot;entry clearfix&amp;quot;&amp;gt;
-  &amp;lt;p&amp;gt;
-    &amp;lt;em&amp;gt;This article was brought to you by Intispace Netmedia, for scalable wordpress hosting visit our site here &amp;lt;strong&amp;gt;&amp;lt;a href=&amp;quot;https://intispace.com/&amp;quot;&amp;gt;www.intispace.com&amp;lt;/a&amp;gt;&amp;lt;/strong&amp;gt;&amp;lt;/em&amp;gt;
-  &amp;lt;/p&amp;gt;
-&amp;lt;/div&amp;gt;&amp;lt;/article&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/div&gt;
-&lt;/div&gt;&lt;/section&gt;&lt;/p&gt;
 </description>
     </item>
     
