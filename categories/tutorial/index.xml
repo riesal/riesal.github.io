@@ -7,7 +7,77 @@
     <language>en-us</language>
     
     
-    <updated>Tue, 11 Oct 2016 18:12:28 &#43;0000</updated>
+    <updated>Tue, 06 Dec 2016 15:12:28 &#43;0000</updated>
+    
+    <item>
+      <title>Compressing many files with Tar</title>
+      <link>https://riesal.github.io/2016/12/compressing-file-with-tar/</link>
+      <pubDate>Tue, 06 Dec 2016 15:12:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/12/compressing-file-with-tar/</guid>
+      <description>&lt;p&gt;Ever tried to compress many (hundreds of thousand) files with tar? With this command: tar -cf file_names.tar *.jpg
+i bet you will found error message like this: -bash: /bin/tar: Argument list too long&lt;/p&gt;
+
+&lt;p&gt;All shell have / has a limit for the command line length. UNIX / Linux / BSD system has a limit on how many bytes can be used for the command line argument and environment variables. The question is how do i find out current command line length limit? the answer is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ getconf ARG_MAX
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ echo $(( $(getconf ARG_MAX) - $(env | wc -c) ))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or in more detail and if your system have xargs command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ xargs --show-limits
+Your environment variables take up 2658 bytes
+POSIX upper limit on argument length (this system): 2092446
+POSIX smallest allowable upper limit on argument length (all systems): 4096
+Maximum length of command we could actually use: 2089788
+Size of command buffer we are actually using: 131072
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Usually linux starting kernel 2.6.23, the ARG_MAX value is about &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;4&lt;/sub&gt; of stack size(ulimit -s), and linux kernel pre 2.6.23 the ARG_MAX value is about PAGE_SIZE * MAX_ARG_PAGES (4096 * 32) minus 4, which means, any number of file lists that exceed this number will break the bash command.&lt;/p&gt;
+
+&lt;p&gt;So, what is the answer? Quite simple:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;use find or xargs command&lt;/li&gt;
+&lt;li&gt;use shell for / while loop&lt;/li&gt;
+&lt;li&gt;use file manifest(need to define before)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In this case i will show you how to compress hundreds of thousand file using tar with file-manifest, tar command provide us with &amp;lsquo;-T&amp;rsquo; option for this!&lt;/p&gt;
+
+&lt;p&gt;Steps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;create the file-manifest
+&lt;code&gt;
+find . -name &#39;*.jpg&#39; -print &amp;gt;/tmp/file.manifest
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;add the file manifest content to tar
+&lt;code&gt;
+tar -cvzf textfiles.tar.gz --files-from /tmp/file.manifest
+&lt;/code&gt;
+or
+&lt;code&gt;
+tar -cv -T /tmp/file.manifest -f tarball.tar
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;remove the jpg files
+&lt;code&gt;
+find . -name &#39;*.jpg&#39; | xargs rm -v
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;or
+&lt;code&gt;
+tar -cvzf textfiles.tar.gz --files-from /tmp/file.manifest --remove-files
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;the.end.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>MySQL Replication Type</title>

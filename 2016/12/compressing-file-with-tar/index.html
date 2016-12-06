@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <title> Categories &middot; M. Fahrizal Rahman </title>
+    <title> Compressing many files with Tar &middot; M. Fahrizal Rahman </title>
     
     <link rel="stylesheet" type="text/css" href="https://riesal.github.io/css/uno.min.css" />
     <link rel="stylesheet" type="text/css" href="https://riesal.github.io/css/lightGallery.css" />
@@ -12,24 +12,22 @@
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.ico">
     
-    <link href="https://riesal.github.io/categories/index.xml" rel="alternate" type="application/rss+xml" title="M. Fahrizal Rahman" />
+    <link href="" rel="alternate" type="application/rss+xml" title="M. Fahrizal Rahman" />
     
     <script src="https://riesal.github.io/js/jquery.min.js"></script>
     <script src="https://riesal.github.io/js/main.min.js">
     </script>
 </head>
 
-<body>
-    <div id="scriptHeader">
+    <body>
+        <div id="scriptHeader">
     <span class="mobile btn-mobile-menu">
             <i class="fa fa-bars btn-mobile-menu__icon"></i>
             <i class="fa fa-times btn-mobile-close__icon hidden"> </i>
     </span>
     <header class="
         
-        
             panel-cover panel-cover--collapsed
-        
         "  style="background-image: url(/images/background-cover.jpg)" >
     <div class="panel-main">
         <div class="panel-main__inner panel-inverted">
@@ -144,102 +142,74 @@
     </header>
 </noscript>
 
-    <div class="content-wrapper">
-        <div class="content-wrapper__inner">
-            <section id="main">
-              <div>
-                <h1 id="title">Categories</h1>
-                <style type="text/css">
-                        #double ul{
-                          width:760px;
-                          margin-bottom:20px;
-                          overflow:hidden;
-                        }
-                        #double li{
-                          line-height:1.5em;
-                          float:left;
-                          display:inline;
-                          width:50%;
-                        }
-                </style>
-                <ul id="double">
-                
-                
-                    <li>
-                        <a href=".ninja">.ninja</a> 1
-                    </li>
-                
-                    <li>
-                        <a href="adwords">adwords</a> 1
-                    </li>
-                
-                    <li>
-                        <a href="aws">aws</a> 3
-                    </li>
-                
-                    <li>
-                        <a href="bookkeeping">bookkeeping</a> 2
-                    </li>
-                
-                    <li>
-                        <a href="business">business</a> 36
-                    </li>
-                
-                    <li>
-                        <a href="cms">cms</a> 1
-                    </li>
-                
-                    <li>
-                        <a href="cpanel">cpanel</a> 1
-                    </li>
-                
-                    <li>
-                        <a href="dns-server">dns-server</a> 2
-                    </li>
-                
-                    <li>
-                        <a href="domain-names">domain-names</a> 25
-                    </li>
-                
-                    <li>
-                        <a href="google-adwords">google-adwords</a> 1
-                    </li>
-                
-                    <li>
-                        <a href="nginx">nginx</a> 1
-                    </li>
-                
-                    <li>
-                        <a href="php">php</a> 3
-                    </li>
-                
-                    <li>
-                        <a href="seo">seo</a> 5
-                    </li>
-                
-                    <li>
-                        <a href="ssl">ssl</a> 3
-                    </li>
-                
-                    <li>
-                        <a href="tutorial">tutorial</a> 6
-                    </li>
-                
-                    <li>
-                        <a href="uncategorized">uncategorized</a> 1
-                    </li>
-                
-                    <li>
-                        <a href="web-server">web-server</a> 2
-                    </li>
-                
-                    <li>
-                        <a href="wordpress">wordpress</a> 12
-                    </li>
-                
-               </ul>
-              </div>
-            </section>
+        <div class="content-wrapper">
+            <div class="content-wrapper__inner">
+                <div class="post">
+                    <h1>Compressing many files with Tar</h1>
+                    <span class="post-date">Tue, Dec 6, 2016</span>
+                    <p>Ever tried to compress many (hundreds of thousand) files with tar? With this command: tar -cf file_names.tar *.jpg
+i bet you will found error message like this: -bash: /bin/tar: Argument list too long</p>
+
+<p>All shell have / has a limit for the command line length. UNIX / Linux / BSD system has a limit on how many bytes can be used for the command line argument and environment variables. The question is how do i find out current command line length limit? the answer is:</p>
+
+<pre><code class="language-sh">$ getconf ARG_MAX
+</code></pre>
+
+<p>or</p>
+
+<pre><code class="language-sh">$ echo $(( $(getconf ARG_MAX) - $(env | wc -c) ))
+</code></pre>
+
+<p>or in more detail and if your system have xargs command:</p>
+
+<pre><code class="language-sh">$ xargs --show-limits
+Your environment variables take up 2658 bytes
+POSIX upper limit on argument length (this system): 2092446
+POSIX smallest allowable upper limit on argument length (all systems): 4096
+Maximum length of command we could actually use: 2089788
+Size of command buffer we are actually using: 131072
+</code></pre>
+
+<p>Usually linux starting kernel 2.6.23, the ARG_MAX value is about <sup>1</sup>&frasl;<sub>4</sub> of stack size(ulimit -s), and linux kernel pre 2.6.23 the ARG_MAX value is about PAGE_SIZE * MAX_ARG_PAGES (4096 * 32) minus 4, which means, any number of file lists that exceed this number will break the bash command.</p>
+
+<p>So, what is the answer? Quite simple:</p>
+
+<ul>
+<li>use find or xargs command</li>
+<li>use shell for / while loop</li>
+<li>use file manifest(need to define before)</li>
+</ul>
+
+<p>In this case i will show you how to compress hundreds of thousand file using tar with file-manifest, tar command provide us with &lsquo;-T&rsquo; option for this!</p>
+
+<p>Steps:</p>
+
+<ul>
+<li>create the file-manifest
+<code>
+find . -name '*.jpg' -print &gt;/tmp/file.manifest
+</code></li>
+<li>add the file manifest content to tar
+<code>
+tar -cvzf textfiles.tar.gz --files-from /tmp/file.manifest
+</code>
+or
+<code>
+tar -cv -T /tmp/file.manifest -f tarball.tar
+</code></li>
+<li>remove the jpg files
+<code>
+find . -name '*.jpg' | xargs rm -v
+</code></li>
+<li>or
+<code>
+tar -cvzf textfiles.tar.gz --files-from /tmp/file.manifest --remove-files
+</code></li>
+</ul>
+
+<p>the.end.</p>
+
+                </div>
             </div>
         </div>
     </body>

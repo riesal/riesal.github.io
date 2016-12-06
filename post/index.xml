@@ -7,7 +7,77 @@
     <language>en-us</language>
     
     
-    <updated>Tue, 11 Oct 2016 18:12:28 &#43;0000</updated>
+    <updated>Tue, 06 Dec 2016 15:12:28 &#43;0000</updated>
+    
+    <item>
+      <title>Compressing many files with Tar</title>
+      <link>https://riesal.github.io/2016/12/compressing-file-with-tar/</link>
+      <pubDate>Tue, 06 Dec 2016 15:12:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/12/compressing-file-with-tar/</guid>
+      <description>&lt;p&gt;Ever tried to compress many (hundreds of thousand) files with tar? With this command: tar -cf file_names.tar *.jpg
+i bet you will found error message like this: -bash: /bin/tar: Argument list too long&lt;/p&gt;
+
+&lt;p&gt;All shell have / has a limit for the command line length. UNIX / Linux / BSD system has a limit on how many bytes can be used for the command line argument and environment variables. The question is how do i find out current command line length limit? the answer is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ getconf ARG_MAX
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ echo $(( $(getconf ARG_MAX) - $(env | wc -c) ))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or in more detail and if your system have xargs command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ xargs --show-limits
+Your environment variables take up 2658 bytes
+POSIX upper limit on argument length (this system): 2092446
+POSIX smallest allowable upper limit on argument length (all systems): 4096
+Maximum length of command we could actually use: 2089788
+Size of command buffer we are actually using: 131072
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Usually linux starting kernel 2.6.23, the ARG_MAX value is about &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;4&lt;/sub&gt; of stack size(ulimit -s), and linux kernel pre 2.6.23 the ARG_MAX value is about PAGE_SIZE * MAX_ARG_PAGES (4096 * 32) minus 4, which means, any number of file lists that exceed this number will break the bash command.&lt;/p&gt;
+
+&lt;p&gt;So, what is the answer? Quite simple:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;use find or xargs command&lt;/li&gt;
+&lt;li&gt;use shell for / while loop&lt;/li&gt;
+&lt;li&gt;use file manifest(need to define before)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In this case i will show you how to compress hundreds of thousand file using tar with file-manifest, tar command provide us with &amp;lsquo;-T&amp;rsquo; option for this!&lt;/p&gt;
+
+&lt;p&gt;Steps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;create the file-manifest
+&lt;code&gt;
+find . -name &#39;*.jpg&#39; -print &amp;gt;/tmp/file.manifest
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;add the file manifest content to tar
+&lt;code&gt;
+tar -cvzf textfiles.tar.gz --files-from /tmp/file.manifest
+&lt;/code&gt;
+or
+&lt;code&gt;
+tar -cv -T /tmp/file.manifest -f tarball.tar
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;remove the jpg files
+&lt;code&gt;
+find . -name &#39;*.jpg&#39; | xargs rm -v
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;or
+&lt;code&gt;
+tar -cvzf textfiles.tar.gz --files-from /tmp/file.manifest --remove-files
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;the.end.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>MySQL Replication Type</title>
@@ -1388,34 +1458,6 @@ Instance metadata is data about your instance that you can use to configure or m
 
 &lt;p&gt;&lt;/div&gt;
 &lt;/div&gt;&lt;/section&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>What is Amazon CloudWatch Logs and how does it work?</title>
-      <link>https://riesal.github.io/2016/05/amazon-cloudwatch-logs-work/</link>
-      <pubDate>Thu, 05 May 2016 16:31:10 &#43;0000</pubDate>
-      
-      <guid>https://riesal.github.io/2016/05/amazon-cloudwatch-logs-work/</guid>
-      <description>&lt;p&gt;Amazon CloudWatch monitors many AWS Services such as Elastic Compute Cloud (EC2), Relational Database Service, Elastic Block Storage and several others. CloudWatch alerts can identify events such as CPU spikes and latency issues. When used with AWS AutoScaling, administrators can seamlessly increase EC2 capacity as needed.&lt;/p&gt;
-
-&lt;p&gt;But since its inception, Amazon CloudWatch has had some limitations. One issue was that it lacked the ability to process huge amounts of custom log data that cloud platforms create, and to react to events in near real time. CloudWatch Logs, a new feature introduced at the AWS Summit in New York last month, is an extension of CloudWatch that admins can use to detect patterns and take action to resolve issues that arise.&lt;/p&gt;
-
-&lt;p&gt;With Amazon CloudWatch Logs, admins can capture any type of log &amp;#8212; from applications, on networks, from devices and so on &amp;#8212; and process it in Amazon Kinesis. From there, admins can then monitor application health.&lt;/p&gt;
-
-&lt;p&gt;Amazon CloudWatch Logs can do everything?&lt;/p&gt;
-
-&lt;p&gt;Logs provide an incredible window into problems that affect a cloud platform and act as a business intelligence resource. Many vendors, such as Loggly and Logentries, have carved out niches, offering tools that interpret AWS logs. These companies don&amp;#8217;t appear too threatened by CloudWatch Logs, as their services are already several generations ahead in their ability to process log data, provide intelligent alerting and help AWS customers identify trends.&lt;/p&gt;
-
-&lt;p&gt;With Amazon CloudWatch Logs, admins can analyze system logs to search for malicious login attempts over Secure Shell or pinpoint a botnet attempting a denial-of-service attack on the Web server. The monitoring tool looks for recurring IP patterns from your Web server logs and blocks access from attacking IP addresses. You also can query applications logs to identify customer usage patterns to improve the customer experience.&lt;/p&gt;
-
-&lt;p&gt;Amazon CloudWatch Logs can identify events that are unique to your specific platform &amp;#8212; not just the canned metrics that CloudWatch delivers. There are operating system logs, application logs, Web server logs or logs from any type of endpoint device.&lt;/p&gt;
-
-&lt;p&gt;And setting up CloudWatch Logs is fairly straightforward. Simply install and configure a CloudWatch Logs agent on an EC2 instance and access results through the Amazon CloudWatch console. Costs associated with Cloudwatch Logs are $0.50 per 1 GB of ingested log data per day, plus $0.03 per GB archived per month, in addition to the cost of Amazon Kinesis.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Keep checking the &lt;a href=&#34;http://blog.intispace.com/&#34;&gt;intispace blog&lt;/a&gt; for more upcoming tips on starting your own business.&lt;/strong&gt; Also, send us a tweet &lt;a href=&#34;https://twitter.com/intispace&#34;&gt;@intispace&lt;/a&gt; with your own ideas on what makes a great domain name!&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;This article was brought to you by Intispace Netmedia, for scalable wordpress hosting visit our site here &lt;strong&gt;&lt;a href=&#34;https://intispace.com/&#34;&gt;www.intispace.com&lt;/a&gt;&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 </description>
     </item>
     
