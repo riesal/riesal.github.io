@@ -15,7 +15,11 @@
       <pubDate>Sat, 19 Nov 2016 09:12:28 &#43;0000</pubDate>
       
       <guid>https://riesal.github.io/2016/11/vim-cheatseet/</guid>
-      <description>&lt;p&gt;VI and VIM Cheatsheet.&lt;/p&gt;
+      <description>&lt;p&gt;Note: If you’re decent at vim and want your mind blown, check out &lt;a href=&#34;http://vimsheet.com/advanced.html&#34;&gt;Advanced Vim&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I’ve compiled a list of essential vim commands that I use every day. I then give a few instructions on how to making vim as great as it should be, because it’s painful without configuration.&lt;/p&gt;
+
+&lt;p&gt;&lt;span id=&#34;more-4512&#34;&gt;&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;div class=&#34;commands-container&#34;&gt;
     &lt;div class=&#34;grid-block&#34;&gt;
