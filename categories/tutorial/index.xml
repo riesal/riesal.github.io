@@ -7,7 +7,430 @@
     <language>en-us</language>
     
     
-    <updated>Thu, 13 Aug 2015 09:07:42 &#43;0000</updated>
+    <updated>Tue, 11 Oct 2016 18:12:28 &#43;0000</updated>
+    
+    <item>
+      <title>MySQL Replication Type</title>
+      <link>https://riesal.github.io/2016/10/mysql-replication-type/</link>
+      <pubDate>Tue, 11 Oct 2016 18:12:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/10/mysql-replication-type/</guid>
+      <description>&lt;p&gt;By default, master and slave servers assume that they are in the same time zone. If you are replicating between servers in different time zones, the time zone must be set on both master and slave. &lt;span id=&#34;more-4512&#34;&gt;&lt;/span&gt;Otherwise, statements depending on the local time on the master are not replicated properly, such as statements that use the NOW() or FROM_UNIXTIME() functions.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;MySQL binary logging and replication is statement-based as well, when the master server commits a change, it writes the SQL statement into its binary log, and any slaves that replicate it execute the same SQL statement into their own database. MySQL also supports row-based replication: the master server logs the data affected by a change (information to INSERT or UPDATE, the identity of rows to DELETE), and the slave applies those changes directly to its database.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Row-based replication was introduced to provide perfect replication of data that is non-deterministic: when the same statement was executed on the master and slave, the outcome was different. It can also have a performance impact. Short SQL queries that affect a lot of rows would require more bandwidth to transmit as row-based replication.&lt;/p&gt;
+
+&lt;p&gt;For example, if replicated by row, this statement would have to uniquely identify 10,000 rows; it would be much more efficiently transmitted as statement-based:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;DELETE FROM goodie.bag WHERE id BETWEEN 1 AND 9000;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But difficult to evaluate queries that change relatively little data would be much faster to apply to slaves if the master told them what to change instead of forcing them to repeat the work. For example, this statement requires a table scan and a hash calculation on every row; slaves could save considerable processor time if the master just told them the outcome of all those calculations using row-based replication:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;DELETE FROM user WHERE MD5(User) = &amp;quot;c498faa0787b2eaf054b81f814b1aa12&amp;quot;;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The MySQL documentation recommends you use Mixed Mode replication. In Mixed Mode replication, most queries are replicated by statement. But transactions MySQL knows are non-deterministic are replicated by row.&lt;/p&gt;
+
+&lt;p&gt;Mixed Mode uses row-based replication for any transaction that:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Uses user defined functions&lt;/li&gt;
+&lt;li&gt;Uses the UUID(), USER(), or CURRENT_USER() functions&lt;/li&gt;
+&lt;li&gt;Uses LOAD_FILE (which otherwise assumes every slave has the exact same file on the local file system and doesn&amp;rsquo;t replicate the data)&lt;/li&gt;
+&lt;li&gt;Updates two tables with auto_increment columns (the binlog format only carries one auto_increment value per statement)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Review a Statement-Based Binary Log,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; show variables like &amp;quot;binlog_format&amp;quot;;
++---------------+-----------+
+| Variable_name | Value     |
++---------------+-----------+
+| binlog_format | STATEMENT |
++---------------+-----------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;rsquo;re going to look at the format of a statement-based binary log. Tell master to end the current log file and start a new one.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; flush logs;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql&amp;gt; show master status;
++------------------+----------+--------------+------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++------------------+----------+--------------+------------------+
+| mysql-bin.000002 |      107 |              |                  |
++------------------+----------+--------------+------------------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Insert a new record.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; insert into important.stuff set details = &#39;testing statement-based replication&#39;;
+Query OK, 1 row affected (0.02 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Exit MySQL and take a look at this statement in the binary log, using the log file you learned from show master status&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; exit
+Bye
+master ~ 
+$ sudo mysqlbinlog /var/lib/mysql/mysql-bin.000002
+/*!50530 SET @@SESSION.PSEUDO_SLAVE_MODE=1*/;
+/*!40019 SET @@session.max_insert_delayed_threads=0*/;
+/*!50003 SET @OLD_COMPLETION_TYPE=@@COMPLETION_TYPE,COMPLETION_TYPE=0*/;
+DELIMITER /*!*/;
+SET INSERT_ID=296/*!*/;
+SET TIMESTAMP=1366738849/*!*/;
+insert into important.stuff set details = &#39;testing statement-based replication&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can see in this statement-based binary log file that replication carries a lot metadata to make sure that the statement works the same on the slave:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;SET INSERT_ID will ensure the row&#39;s id is the same on both servers.
+SET TIMESTAMP will ensure the row&#39;s happened column shows the same time on both servers.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally, you can see the statement itself in the binary log, ready to be replicated.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;slave ~ $ mysql -u root
+mysql&amp;gt; select * from important.stuff order by id desc limit 1;
++-----+---------------------------+---------------------+
+| id  | details                   | happened            |
++-----+---------------------------+---------------------+
+| 296 | testing happy replication | 2013-04-12 14:09:26 |
++-----+---------------------------+---------------------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After this step is completed:
+INSERT a new record on the master in the table important.stuff
+Within 1 second, that record is replicated to the slave&lt;/p&gt;
+
+&lt;p&gt;Non-Deterministic Problem with Statement-Based Replication
+Now we&amp;rsquo;re going to intentionally use a function that is not compatible with statement-based replication.&lt;/p&gt;
+
+&lt;p&gt;The UUID() function creates a universally unique identifier. By definition, the output of the UUID() function should be different every time it is run.&lt;/p&gt;
+
+&lt;p&gt;(Note, RAND() doesn&amp;rsquo;t have this problem; MySQL logs the random number generator seed to the binary log; using the same seed, the slave generates the same pseudorandom number.)&lt;/p&gt;
+
+&lt;p&gt;Insert a new row in the master containing a UUID.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;master ~ $ mysql -u root
+mysql&amp;gt; insert into important.stuff set details=UUID();
+Query OK, 1 row affected, 1 warning (0.03 sec)
+
+mysql&amp;gt; select * from important.stuff order by id desc limit 1;
++-----+--------------------------------------+---------------------+
+| id  | details                              | happened            |
++-----+--------------------------------------+---------------------+
+| 287 | aebd063b-a960-11e2-bcc6-12313909faab | 2013-04-20 02:19:08 |
++-----+--------------------------------------+---------------------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now view the same record on the slave:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; select * from important.stuff order by id desc limit 1;
++-----+--------------------------------------+---------------------+
+| id  | details                              | happened            |
++-----+--------------------------------------+---------------------+
+| 287 | aec0309a-a960-11e2-aef4-1231390f21fa | 2013-04-20 02:19:08 |
++-----+--------------------------------------+---------------------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can see that the details column for the newest row is different between the two servers. (They&amp;rsquo;re similar because UUID is built from timestamp and network address, and the statement replicated quickly between servers with similar network characteristics.)&lt;/p&gt;
+
+&lt;p&gt;After this step is completed:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;On the master, the MySQL variable binlog_format has default value STATEMENT&lt;/li&gt;
+&lt;li&gt;On the slave, the MySQL variable binlog_format has default value STATEMENT&lt;/li&gt;
+&lt;li&gt;INSERT a new record containing a UUID on the master in the table important.stuff&lt;/li&gt;
+&lt;li&gt;Within 1 second, replication inserts a different record on the slave&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Configure Row-Based Replication
+Configure the master for row-based replication:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; exit
+Bye
+master ~ $ sudoedit /etc/my.cnf
+
+Insert this line immediately after [mysql]:
+[mysqld]
+binlog_format = row
+
+Then restart the MySQL service on the master and verify the change:
+master ~ $ sudo service mysqld restart
+Stopping mysqld:                                           [  OK  ]
+Starting mysqld:                                           [  OK  ]
+master ~ $ mysql -u root
+
+mysql&amp;gt; show variables like &amp;quot;binlog_format&amp;quot;;
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| binlog_format | ROW   |
++---------------+-------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Complete the same procedure on the slave.&lt;/p&gt;
+
+&lt;p&gt;After this step is completed:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;On the master, /etc/my.cnf sets binlog_format to ROW&lt;/li&gt;
+&lt;li&gt;On the master, the MySQL variable binlog_format has value ROW&lt;/li&gt;
+&lt;li&gt;On the slave, /etc/my.cnf sets binlog_format to ROW&lt;/li&gt;
+&lt;li&gt;On the slave, the MySQL variable binlog_format has value ROW&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Review a Row-Based Binary Log
+The master will have started a new binary log file during the service restart, so let&amp;rsquo;s run two interesting transactions.&lt;/p&gt;
+
+&lt;p&gt;First, insert another row on the master containing a UUID, to show that row-based replication solves that problem:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; insert into important.stuff set details=UUID();
+Query OK, 1 row affected (0.02 sec)
+
+mysql&amp;gt; select * from important.stuff order by id desc limit 1;
++-----+--------------------------------------+---------------------+
+| id  | details                              | happened            |
++-----+--------------------------------------+---------------------+
+| 288 | 5445c7d9-a961-11e2-82fd-12313909faab | 2013-04-20 02:23:46 |
++-----+--------------------------------------+---------------------+
+1 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Look up the new row on the slave:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; select * from important.stuff order by id desc limit 1;
++-----+--------------------------------------+---------------------+
+| id  | details                              | happened            |
++-----+--------------------------------------+---------------------+
+| 288 | 5445c7d9-a961-11e2-82fd-12313909faab | 2013-04-20 02:23:46 |
++-----+--------------------------------------+---------------------+
+1 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This time, the slave replicated a perfect copy of the UUID.&lt;/p&gt;
+
+&lt;p&gt;Now, on the master, we&amp;rsquo;ll perform a large DELETE query to see a downside of row-based replication.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; select count(*) from important.stuff;
++----------+
+| count(*) |
++----------+
+|      288 |
++----------+
+1 row in set (0.01 sec)
+
+mysql&amp;gt; delete from important.stuff where id between 100 and 199;
+Query OK, 100 rows affected (0.04 sec)
+
+mysql&amp;gt; select count(*) from important.stuff;
++----------+
+| count(*) |
++----------+
+|      188 |
++----------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And verify that the slave applied the same change:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; select count(*) from important.stuff;
++----------+
+| count(*) |
++----------+
+|      188 |
++----------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Back on the master, look at how these two changes are represented in the binary log.&lt;/p&gt;
+
+&lt;p&gt;The master will have started a new binary log file during the service restart, these two transactions are the only content in the latest log file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; show master status;
++------------------+----------+--------------+------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++------------------+----------+--------------+------------------+
+| mysql-bin.000003 |     3168 |              |                  |
++------------------+----------+--------------+------------------+
+1 row in set (0.00 sec)
+
+mysql&amp;gt; exit
+Bye
+master ~ 
+$ sudo mysqlbinlog /var/lib/mysql/mysql-bin.000003
+......some content not shown
+/*!*/;
+\#130424  4:25:55 server id 10  end_log_pos 233     Table_map: `important`.`stuff` mapped to number 33
+\#130424  4:25:55 server id 10  end_log_pos 308     Write_rows: table id 33 flags: STMT_END_F
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Near the top of the file, you&amp;rsquo;ll see the transaction where you inserted the working row with a UUID. You&amp;rsquo;ll also notice that there&amp;rsquo;s no obvious way to figure out what is going on reading the log file, even with the help of mysqlbinlog. Because this log file contains only one INSERT, it&amp;rsquo;s possible find that transaction by looking for Write_rows.&lt;/p&gt;
+
+&lt;p&gt;The row data itself is passed in the three-line BINLOG block.&lt;/p&gt;
+
+&lt;p&gt;The next transaction is the large DELETE:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;\#130424  4:32:08 server id 10  end_log_pos 671     Table_map: `important`.`stuff` mapped to number 33
+\#130424  4:32:08 server id 10  end_log_pos 1708     Delete_rows: table id 33
+\#130424  4:32:08 server id 10  end_log_pos 2747     Delete_rows: table id 33
+\#130424  4:32:08 server id 10  end_log_pos 3566     Delete_rows: table id 33 flags: STMT_END_F
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The huge binlog data block (which we&amp;rsquo;ve reproduced barely a fraction of here) contains the information the slave will need to uniquely identify each of the 100 affected rows.&lt;/p&gt;
+
+&lt;p&gt;After this step is completed:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;INSERT a new record containing a UUID on the master in the table important.stuff&lt;/li&gt;
+&lt;li&gt;Within 1 second, that exact record is replicated to the slave&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Configure Mixed Mode Replication&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;In Mixed Mode, MySQL uses statement-based replication for most queries, switching to row-based replication only when statement-based replication would cause an inconsistency (or corruption). It is a compromise between the two replication types we&amp;rsquo;ve already explored.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Turn on Mixed Mode on the master by editing /etc/my.cnf&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;master ~ $ sudoedit /etc/my.cnf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Update the binlog_format setting to be mixed:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;[mysqld]
+binlog_format = mixed
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then restart the MySQL service on the master and verify the change:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;master ~ $ sudo service mysqld restart
+Stopping mysqld:                                           [  OK  ]
+Starting mysqld:                                           [  OK  ]
+master ~ $ mysql -u root
+
+mysql&amp;gt; show variables like &amp;quot;binlog_format&amp;quot;;
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| binlog_format | MIXED |
++---------------+-------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Repeat this procedure on the slave.
+After this step is completed:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;On the master, /etc/my.cnf sets binlog_format to MIXED&lt;/li&gt;
+&lt;li&gt;On the master, the MySQL variable binlog_format has value MIXED&lt;/li&gt;
+&lt;li&gt;On the slave, /etc/my.cnf sets binlog_format to MIXED&lt;/li&gt;
+&lt;li&gt;On the slave, the MySQL variable binlog_format has value MIXED&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Review a Mixed Mode Binary Log
+Now insert another row on the master containing a UUID:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; insert into important.stuff set details=UUID();
+Query OK, 1 row affected (0.02 sec)
+
+mysql&amp;gt; select * from important.stuff order by id desc limit 1;
++-----+--------------------------------------+---------------------+
+| id  | details                              | happened            |
++-----+--------------------------------------+---------------------+
+| 288 | 5445c7d9-a961-11e2-82fd-12313909faab | 2013-04-20 02:23:46 |
++-----+--------------------------------------+---------------------+
+2 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now verify that the new row, as replicated to the slave, has a details column that matches the master:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; select * from important.stuff order by id desc limit 1;
++-----+--------------------------------------+---------------------+
+| id  | details                              | happened            |
++-----+--------------------------------------+---------------------+
+| 288 | 5445c7d9-a961-11e2-82fd-12313909faab | 2013-04-20 02:23:46 |
++-----+--------------------------------------+---------------------+
+2 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then run another large DELETE on the master:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; select count(*) from important.stuff;
++----------+
+| count(*) |
++----------+
+|      188 |
++----------+
+1 row in set (0.01 sec)
+
+mysql&amp;gt; delete from important.stuff where id between 200 and 299;
+Query OK, 100 rows affected (0.04 sec)
+
+mysql&amp;gt; select count(*) from important.stuff;
++----------+
+| count(*) |
++----------+
+|       88 |
++----------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And verify that the slave applied the same change:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; select count(*) from important.stuff;
++----------+
+| count(*) |
++----------+
+|       88 |
++----------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then view the log on the master:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql&amp;gt; show master status;
++------------------+----------+--------------+------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++------------------+----------+--------------+------------------+
+| mysql-bin.000004 |      532 |              |                  |
++------------------+----------+--------------+------------------+
+1 row in set (0.00 sec)
+
+mysql&amp;gt; exit
+Bye
+master ~ 
+$ sudo mysqlbinlog /var/lib/mysql/mysql-bin.000004
+\#130424  4:56:08 server id 10  end_log_pos 224     Table_map: `important`.`stuff` mapped to number 33
+\#130424  4:56:08 server id 10  end_log_pos 299     Write_rows: table id 33 flags: STMT_END_F
+SET TIMESTAMP=1366779399/*!*/;
+delete from important.stuff where id between 200 and 299
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In this binary log, you can see the INSERT used row-based replication, because it contained a call to the UUID() function. You can still find this transaction by the tell-tale Write_rows marker. Meanwhile, the DELETE used the more efficient statement-based replication because it did not contain any non-deterministic warning signs.&lt;/p&gt;
+
+&lt;p&gt;After this step is completed:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;INSERT a new record containing a UUID on the master in the table important.stuff&lt;/li&gt;
+&lt;li&gt;Within 1 second, that exact record is replicated to the slave&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Easy ways to create a sitemap</title>
