@@ -726,6 +726,24 @@ delete from important.stuff where id between 200 and 299
     </item>
     
     <item>
+      <title>Solaris Commandline Compendium</title>
+      <link>https://riesal.github.io/2016/06/solaris-commandline-compendium/</link>
+      <pubDate>Tue, 21 Jun 2016 16:12:28 &#43;0000</pubDate>
+      
+      <guid>https://riesal.github.io/2016/06/solaris-commandline-compendium/</guid>
+      <description>&lt;p&gt;Ever tried to use Sun Solaris or Joyent SmartOS? Feeling confused? well, this is my list of Sun Solaris and SmartOS command line.
+&lt;span id=&#34;more-4512&#34;&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;prtconf | grep Memory&lt;/code&gt; # Total Physical Memory in the system(total RAM).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;vmstat&lt;/code&gt; # Available Physical Memory(i.e. RAM Usage)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;echo ::memstat | mdb -k&lt;/code&gt; # Total (Logical) Memory in the system&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;echo ::memstat | mdb -k&lt;/code&gt; # Available (Logical) Memory.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Easy ways to create a sitemap</title>
       <link>https://riesal.github.io/2015/08/easy-ways-to-create-a-sitemap/</link>
       <pubDate>Thu, 13 Aug 2015 09:07:42 &#43;0000</pubDate>
